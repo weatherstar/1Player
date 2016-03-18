@@ -1,2 +1,2 @@
-# Find-right-song
-:tiger: A chrome extension which can help you find the right song quickly.
+# 1Player
+通过chrome插件来控制音乐网站的播放器（网易云音乐/QQ音乐/虾米音乐），免除多个tab或窗口时切换回音乐网站操作的烦恼。
