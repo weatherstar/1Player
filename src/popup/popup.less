@@ -1,7 +1,49 @@
-.name{
-  color: #fff;
-  .test{
-    width: 20px;
-    border-radius: 2px;
+//attributes
+@playPicWidth: 100px;
+@playHeight: 100px;
+
+
+*{margin: 0; padding: 0;}
+
+.one-player{
+  overflow: hidden;
+  font-family: Arial,Helvetica,sans-serif;
+  font-size: 12px;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
+  .one-player-pic{
+    float: left;
+    width: @playPicWidth;
+    height: @playHeight;
+    text-align: center;
+    img{
+      max-width: 100%;
+      max-height: 100%;
+    }
+  }
+  .one-player-info{
+    margin-left: @playPicWidth;
+    .one-player-name{
+      .music-name{
+        font-size: 14px;
+      }
+      .author-name{
+        color: #666;
+      }
+    }
+    .one-player-control-panel-main{
+      height: 60px;
+    }
+    .one-player-control-panel-other{
+      .progress-wrap{
+        margin: 0 140px 0 5px;
+        .progress{
+          position: relative;
+          height: 2px;
+          width: 100%;
+          background: #cdcdcd;
+          cursor: pointer!important;
+        }
+      }
+    }
   }
 }

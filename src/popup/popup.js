@@ -1,3 +1,4 @@
 (function () {
-    alert('fsdl');
+    var name = '';
+
 })();
