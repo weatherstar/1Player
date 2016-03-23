@@ -26,7 +26,7 @@ gulp.task('default', ['d']);
 gulp.task('d', ['clean'], sequence('build','webserver','watch'));
 
 gulp.task('build', function (callback) {
-    sequence('less', 'script', 'images', ['copy_html', 'copy_other'])(callback)
+    sequence('less', 'script', 'images', ['copy_html', 'copy_fonts','copy_other'])(callback)
 });
 
 gulp.task('clean', function () {
@@ -66,6 +66,12 @@ gulp.task('copy_html', function () {
     return gulp.src(path.join(SRC_DIR, '**', '*.html'))
         .pipe(flatten())
         .pipe(gulp.dest(DIST_DIR))
+});
+
+gulp.task('copy_fonts', function () {
+    return gulp.src(path.join(SRC_DIR,'fonts/**'))
+        .pipe(flatten())
+        .pipe(gulp.dest(DIST_DIR + '/fonts'));
 });
 
 gulp.task('copy_other', function () {

@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>one-player</title>
     <link rel="stylesheet" href="./css/popup.css"/>
+    <link rel="stylesheet" href="./css/font.css"/>
 </head>
 <body>
     <div class="one-player">
@@ -16,16 +18,34 @@
                 <span class="author-name">-周杰伦</span>
             </div>
             <div class="one-player-control-panel-main">
-                2
+                <div class="list-control">
+                    <span class="icon-rewind"></span>
+
+                    <span class="icon-play"></span>
+
+                    <span class="icon-fast-forward"></span>
+
+                </div>
             </div>
             <div class="one-player-control-panel-other">
-                <div class="progress-wrap">
-                    <div class="progress"></div>
+                <div class="progress-wrap ">
+                    <div class="progress">
+                        <div class="progress-loaded"></div>
+                        <div class="progress-played">
+                            <span class="progress-thumb"></span>
+                        </div>
+                    </div>
                 </div>
                 <div class="other-control">
-                    <div class="play-time"></div>
-                    <div class="play-volume"></div>
-                    <div class="play-loop"></div>
+                    <div class="play-time control-item">
+                        - <span class="">00:35</span> / <span class="">04:23</span>
+                    </div>
+                    <div class="play-volume control-item">
+                        <i class="one-play-icon-volume icon-volume-off"></i>
+                    </div>
+                    <div class="play-type control-item">
+                        <i class="one-play-icon-loop icon-loop"></i>
+                    </div>
                 </div>
             </div>
         </div>
