@@ -6,6 +6,7 @@ var gulp = require('gulp');
 var uglify = require('gulp-uglify');
 var flatten = require('gulp-flatten');
 var less = require('gulp-less');
+var replace = require('gulp-replace');
 var sequence = require('gulp-sequence').use(gulp);
 var sourcemaps = require('gulp-sourcemaps');
 var webserver = require('gulp-webserver');
@@ -64,6 +65,7 @@ gulp.task('images', function(cb) {
 
 gulp.task('copy_html', function () {
     return gulp.src(path.join(SRC_DIR, '**', '*.html'))
+        .pipe(replace('',''))
         .pipe(flatten())
         .pipe(gulp.dest(DIST_DIR))
 });

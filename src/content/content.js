@@ -1,3 +1,12 @@
-/**
- * Created by lanziliang on 16/3/22.
- */
+(function (_window) {
+    var Content = Base.extend(Base,{
+        events: {
+            'click .prv': 'sendMessage,'
+        },
+        afterInit: function(){
+            alert('test');
+        }
+    });
+
+    Content.init();
+})(window);
