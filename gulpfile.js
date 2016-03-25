@@ -36,18 +36,24 @@ gulp.task('clean', function () {
 
 gulp.task('script', function () {
    return gulp.src(path.join(SRC_DIR, '**', '*.js'))
-       .pipe(uglify())
+       .pipe(sourcemaps.init({loadMaps: true}))
+       .pipe(uglify({
+           compress:{
+               drop_debugger: false
+           }
+       }))
+       .pipe(sourcemaps.write('./'))
        .pipe(flatten())
        .pipe(gulp.dest(DIST_DIR + '/js'));
 });
 
 gulp.task('less', function () {
     return gulp.src(path.join(SRC_DIR, '**', '*.less'))
-        .pipe(sourcemaps.init())
+        .pipe(sourcemaps.init({loadMaps: true}))
         .pipe(less({
             plugins: [autoprefix, cleancss]
         }))
-        .pipe(sourcemaps.write())
+        .pipe(sourcemaps.write('./'))
         .pipe(flatten())
         .pipe(gulp.dest(DIST_DIR + '/css'));
 });
@@ -65,7 +71,9 @@ gulp.task('images', function(cb) {
 
 gulp.task('copy_html', function () {
     return gulp.src(path.join(SRC_DIR, '**', '*.html'))
-        .pipe(replace('',''))
+        .pipe(replace(/(<script.*src=").*(\/\w+\.js")/gi, function (origin,$1,$2) {
+            return $1+'./js'+$2;
+        }))
         .pipe(flatten())
         .pipe(gulp.dest(DIST_DIR))
 });

@@ -32,6 +32,7 @@
     "gulp-replace": "^0.5.4",
     "gulp-sequence": "^0.4.5",
     "gulp-uglify": "^1.5.3",
+    "gulp-uglifyjs": "^0.6.2",
     "gulp-webserver": "^0.9.1",
     "less-plugin-autoprefix": "^1.5.1",
     "less-plugin-clean-css": "^1.5.1"

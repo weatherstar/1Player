@@ -18,12 +18,21 @@
             return o;
         },
         bindEvent: function(){
-            if(this.events){
-                for(var event in this.events){
-                    console.log(event);
+            var self = this;
+            var elements = null;
+            var event = null;
+            if(self.events){
+                for(var item in self.events){
+                    if(self.events.hasOwnProperty(item)){
+                        event = item.split(' ');
+                        elements = Array.prototype.slice.apply(document.querySelectorAll(event[1]));
+                        elements.forEach(function (element) {
+                            element.addEventListener(event[0],self[self.events[item]])
+                        })
+                    }
                 }
             }
         }
     };
-    _window.Base = Base;
+    _window.Base = new Base();
 })(window);

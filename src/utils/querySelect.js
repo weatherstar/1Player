@@ -1,4 +1,9 @@
 (function (_window) {
-    _window.$ = document.querySelector;
-    _window.$$ = document.querySelectorAll;
+    _window.$ = function(s){
+        return document.querySelector(s);
+    };
+
+    _window.$$ = function (s) {
+        return Array.prototype.slice.apply(document.querySelectorAll(s))
+    };
 })(window);
