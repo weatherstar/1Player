@@ -90,6 +90,7 @@
 
         getSongTime: function () {
 
+
         },
         getSongID: function () {
             return $(this.MUSIC_163_PLAYER_ID + ' .name').getAttribute('href').match(/\d+/)[0];
