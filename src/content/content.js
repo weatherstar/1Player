@@ -7,7 +7,6 @@
         GET_MUSIC_ID_DELAY: 1000,
         CHECK_INIT_DELAY: 1000,
 
-        $songNameEl: $('#g_player .name'),
 
         playerInit: false,
         currentSongID: '',
@@ -19,9 +18,9 @@
         afterInit: function () {
             var self = this;
             self.getPageUniqueID();
-            self.connectWithExtension();
             self.checkPlayerInit(function () {
                 self.playerInit = true;
+                self.connectWithExtension();
                 self.sendInitMessage();
                 self.listenMusicChange();
             });
@@ -33,7 +32,6 @@
                 songID = self.getSongID();
                 if(songID != self.currentSongID){
                     self.currentSongID = songID;
-                    console.log(self.currentSongID);
                 }
             }, self.GET_MUSIC_ID_DELAY);
         },
@@ -54,19 +52,19 @@
         },
         listenExtensionMessage: function () {
             var self = this;
-            self.connectPort.onMessage.addEventListener(function (message) {
+            self.connectPort.onMessage.addListener(function (message) {
                 
             })
         },
         sendInitMessage: function () {
             var self = this;
-            self.sendInitMessage({
-                type: self.Events.INIT,
-                songInfo: self.getSongInfo()
+            self.sendMessage({
+                "type": Events.INIT,
+                "songInfo": self.getSongInfo()
             })
         },
         sendMessage: function (message) {
-            this.connectPort.postMessage(message);
+            this.connectPort.postMessage(JSON.stringify(message));
         },
         getSongInfo: function () {
             var self = this;
@@ -88,9 +86,11 @@
             };
         },
 
+        getSongLoaded: function () {
+            return $(this.MUSIC_163_PLAYER_ID + ' .rdy').style.width;
+        },
         getSongTime: function () {
-
-
+            return $(this.MUSIC_163_PLAYER_ID + ' .time').innerText;
         },
         getSongID: function () {
             return $(this.MUSIC_163_PLAYER_ID + ' .name').getAttribute('href').match(/\d+/)[0];
