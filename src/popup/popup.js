@@ -16,13 +16,20 @@
 
         playerInit: false,
         currentPageID:'',
+        songInfo: null,
 
         afterInit: function () {
+            console.log('init');
             var self = this;
+            this.songInfo = this.getSongInfo();
+            this.initPlayer();
         },
         initPlayer: function () {
             var self = this;
             self.fillPlayerDOM();
+        },
+        getSongInfo: function () {
+            return chrome.extension.getBackgroundPage().Background.songInfo;
         },
         fillPlayerDOM: function () {
             this.fillSongName();
