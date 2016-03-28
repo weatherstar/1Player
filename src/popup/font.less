@@ -24,10 +24,17 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+[class^="icon-"],[class*=" icon-"]{
+  &:hover{
+    &:before{
+      color: #000;
+    }
+  }
+}
 [class^="icon-"]:before,
 [class*=" icon-"]:before {
   font-family: "one-play-font" !important;
+  color: #666;
   cursor: pointer;
   font-style: normal !important;
   font-weight: normal !important;

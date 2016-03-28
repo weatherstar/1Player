@@ -12,8 +12,15 @@
   font-size: 12px;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
 
+  .clickable{
+    cursor: pointer;
+    &:hover{
+      text-decoration: underline;
+    }
+  }
 
-  .one-player-pic{
+
+  .song-pic{
     float: left;
     width: @playPicWidth;
     height: @playHeight;
@@ -33,19 +40,25 @@
       .music-name{
         font-size: 14px;
       }
-      .author-name{
+      .singer-name{
         color: #666;
       }
     }
     .one-player-control-panel-main{
       .list-control{
         text-align: center;
-        color: #333;
-        font-size: 32px;
+        font-size: 0;
         height: 54px;
         line-height: 54px;
+        .clickable{
+          &:hover{
+            text-decoration: none;
+          }
+          font-size: 24px;
+        }
         .icon-play{
           margin: 0 40px;
+
         }
       }
     }
@@ -96,15 +109,16 @@
         right: 0;
         bottom: -5px;
         height: 17px;
-        color: #999;
         font-size: 11px;
+        .play-time{
+          color: #999;
+        }
         .play-volume{
           position: relative;
           display: inline-block;
           margin-left: 7px;
           cursor: pointer!important;
           i{
-            color: #666;
             font-size: 15px;
             cursor: pointer;
             transition: all .2s ease;

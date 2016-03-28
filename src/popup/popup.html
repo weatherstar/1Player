@@ -9,21 +9,21 @@
 </head>
 <body>
     <div class="one-player">
-        <div class="one-player-pic">
+        <div class="song-pic clickable">
             <img src="./imgs/default_music_pic.jpg" alt=""/>
         </div>
         <div class="one-player-info">
             <div class="one-player-name">
-                <span class="music-name">半岛铁盒</span>
-                <span class="author-name">-周杰伦</span>
+                <span class="song-name clickable">半岛铁盒</span>
+                <span class="singer-name clickable">-周杰伦</span>
             </div>
             <div class="one-player-control-panel-main">
                 <div class="list-control">
-                    <span class="icon-rewind"></span>
+                    <span class="clickable play-prev icon-rewind"></span>
 
-                    <span class="icon-play"></span>
+                    <span class="clickable play icon-play"></span>
 
-                    <span class="icon-fast-forward play-next"></span>
+                    <span class="clickable play-next icon-fast-forward"></span>
 
                 </div>
             </div>
@@ -37,8 +37,8 @@
                     </div>
                 </div>
                 <div class="other-control">
-                    <div class="play-time control-item">
-                        - <span class="">00:35</span> / <span class="">04:23</span>
+                    <div class="control-item">
+                        - <span class="play-time">00:00/ 00:00</span>
                     </div>
                     <div class="play-volume control-item">
                         <i class="one-play-icon-volume icon-volume-off"></i>
@@ -50,8 +50,9 @@
             </div>
         </div>
     </div>
-    <script src="../utils/base.js"></script>
     <script src="../utils/querySelect.js"></script>
+    <script src="../utils/base.js"></script>
+    <script src="../utils/events.js"></script>
     <script src="./js/popup.js"></script>
 </body>
 </html>

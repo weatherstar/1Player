@@ -1,7 +1,6 @@
 (function (_window) {
     var Content = Base.extend({
 
-
         MUSIC_163_PLAYER_ID: '#g_player',
         UNIQUE_ID: '',
         GET_MUSIC_ID_DELAY: 1000,
@@ -64,13 +63,14 @@
             })
         },
         sendMessage: function (message) {
-            this.connectPort.postMessage(JSON.stringify(message));
+            this.connectPort.postMessage(message);
         },
         getSongInfo: function () {
             var self = this;
             var singerInfo = self.getSingerInfo();
             return {
                 "song_id": self.getSongID(),
+                "song_img": self.getSongImage(),
                 "song_name": self.getSongName(),
                 "singer_id": singerInfo.id,
                 "singer_name": singerInfo.name,
@@ -88,6 +88,9 @@
 
         getSongLoaded: function () {
             return $(this.MUSIC_163_PLAYER_ID + ' .rdy').style.width;
+        },
+        getSongImage: function () {
+            return $(this.MUSIC_163_PLAYER_ID + ' .head img').src.replace(/34y34/gi,'130y130');
         },
         getSongTime: function () {
             return $(this.MUSIC_163_PLAYER_ID + ' .time').innerText;
