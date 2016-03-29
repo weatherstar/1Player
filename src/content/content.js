@@ -31,6 +31,7 @@
                 songID = self.getSongID();
                 if(songID != self.currentSongID){
                     self.currentSongID = songID;
+                    self.sendSongChangeMessage();
                 }
             }, self.GET_MUSIC_ID_DELAY);
         },
@@ -55,10 +56,17 @@
                 
             })
         },
+        sendSongChangeMessage: function () {
+            var self = this;
+            self.sendMessage({
+                type: Events.SONG_CHANGE,
+                songInfo: self.getSongInfo()
+            });
+        },
         sendInitMessage: function () {
             var self = this;
             self.sendMessage({
-                "type": Events.INIT,
+                "type": Events.INIT_PLAYER,
                 "songInfo": self.getSongInfo()
             })
         },
@@ -75,6 +83,7 @@
                 "singer_id": singerInfo.id,
                 "singer_name": singerInfo.name,
                 "loaded": self.getSongLoaded(),
+                "played": self.getSongPlayed(),
                 "time": self.getSongTime()
             }
         },
@@ -85,7 +94,9 @@
                 name: singerEl.innerText
             };
         },
-
+        getSongPlayed: function () {
+            return $(this.MUSIC_163_PLAYER_ID + ' .cur').style.width;
+        },
         getSongLoaded: function () {
             return $(this.MUSIC_163_PLAYER_ID + ' .rdy').style.width;
         },

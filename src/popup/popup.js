@@ -19,36 +19,67 @@
         songInfo: null,
 
         afterInit: function () {
-            console.log('init');
-            var self = this;
-            this.songInfo = this.getSongInfo();
-            this.initPlayer();
+            if(this.checkInit()){
+                this.initPlayer();
+            }
+            this.listenExtensionMessage();
         },
         initPlayer: function () {
+            this.refreshSongInfo();
+            this.fillPlayerDOM();
+        },
+        listenExtensionMessage: function () {
             var self = this;
-            self.fillPlayerDOM();
+            chrome.extension.onMessage.addListener(function (msg) {
+                switch(msg){
+                    case Events.INIT_PLAYER:
+                        self.initPlayer();
+                        break;
+                    case  Events.SONG_CHANGE:
+                        self.changeSong();
+                        break;
+                }
+            })
+        },
+        changeSong: function () {
+            this.refreshSongInfo();
+            this.fillPlayerDOM();
+        },
+        checkInit: function () {
+            return this.getBackgroundPage().playerInit;
         },
         getSongInfo: function () {
-            return chrome.extension.getBackgroundPage().Background.songInfo;
+            return this.getBackgroundPage().songInfo;
+        },
+        getBackgroundPage: function () {
+            return chrome.extension.getBackgroundPage().Background;
+        },
+        refreshSongInfo: function () {
+            this.songInfo = this.getSongInfo();
         },
         fillPlayerDOM: function () {
             this.fillSongName();
             this.fillSongImage();
             this.fillSingerName();
             this.fillLoaded();
+            this.fillPlayed();
             this.fillTime();
         },
         fillSongName: function () {
             this.songNameEL.innerText = this.songInfo.song_name;
-            this.songNameEl.setAttribute('data-src','/song?id='+ this.songInfo.song_id);
+            //todo 使用 this.sonNameEl 调用setAttribute会报 this.sonNameEl undefined错误
+            $('.song-name').setAttribute('data-src','/song?id='+ this.songInfo.song_id);
         },
         fillSongImage: function () {
-            this.songImageEl.setAttribute('data-src','/song?id='+ this.songInfo.song_id);
+            $('.song-pic').setAttribute('data-src','/song?id='+ this.songInfo.song_id);
             this.songImageEl.querySelector('img').src = this.songInfo.song_img;
         },
         fillSingerName: function () {
             this.singerNameEl.innerText = this.songInfo.singer_name;
-            this.singerNameEl.setAttribute('data-src','/artist?id='+ this.songInfo.singer_id);
+            $('.singer-name').setAttribute('data-src','/artist?id='+ this.songInfo.singer_id);
+        },
+        fillPlayed: function () {
+            this.playedEL.style.width = this.songInfo.played;
         },
         fillLoaded: function () {
             this.loadedEL.style.width = this.songInfo.loaded;
