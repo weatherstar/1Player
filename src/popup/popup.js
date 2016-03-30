@@ -1,7 +1,9 @@
 (function (_window) {
     var Popup = Base.extend({
         events: {
-            'change .play-next': 'playNext'
+            'click .play-next': 'playNext',
+            'click .play-prev': 'playPrev',
+            'click .play': 'playOrPause'
         },
 
         MUSIC_163_LINK: 'http://music.163.com/ ',
@@ -17,20 +19,23 @@
         playerInit: false,
         currentPageID:'',
         songInfo: null,
+        backgroundPage: null,
 
         afterInit: function () {
             if(this.checkInit()){
+                this.refreshSongInfo();
                 this.initPlayer();
             }
+            this.backgroundPage = this.getBackgroundPage();
             this.listenExtensionMessage();
         },
         initPlayer: function () {
-            this.refreshSongInfo();
             this.fillPlayerDOM();
         },
         listenExtensionMessage: function () {
             var self = this;
             chrome.extension.onMessage.addListener(function (msg) {
+                self.refreshSongInfo();
                 switch(msg){
                     case Events.INIT_PLAYER:
                         self.initPlayer();
@@ -38,12 +43,25 @@
                     case  Events.SONG_CHANGE:
                         self.changeSong();
                         break;
+                    case  Events.SONG_PROGRESS:
+                        self.changeProgress();
+                        break;
+                    case  Events.SONG_PAUSE:
+                        self.changePlayState();
                 }
             })
         },
         changeSong: function () {
-            this.refreshSongInfo();
             this.fillPlayerDOM();
+        },
+        changeProgress: function () {
+            this.fillProgressDOM();
+        },
+        changePlayState: function () {
+            var addClass = this.songInfo.playing? 'icon-pause':'icon-play';
+            var removeClass = this.songInfo.playing? 'icon-play':'icon-pause';
+            this.playEL.classList.remove(removeClass);
+            this.playEL.classList.add(addClass);
         },
         checkInit: function () {
             return this.getBackgroundPage().playerInit;
@@ -57,6 +75,11 @@
         refreshSongInfo: function () {
             this.songInfo = this.getSongInfo();
         },
+        fillProgressDOM: function () {
+            this.fillLoaded();
+            this.fillPlayed();
+            this.fillTime();
+        },
         fillPlayerDOM: function () {
             this.fillSongName();
             this.fillSongImage();
@@ -64,6 +87,7 @@
             this.fillLoaded();
             this.fillPlayed();
             this.fillTime();
+            this.changePlayState();
         },
         fillSongName: function () {
             this.songNameEL.innerText = this.songInfo.song_name;
@@ -88,7 +112,13 @@
             this.timeEL.innerText = this.songInfo.time;
         },
         playNext: function(){
-            alert('next');
+            Popup.backgroundPage.playNext();
+        },
+        playPrev: function(){
+            Popup.backgroundPage.playPrev();
+        },
+        playOrPause: function(){
+            Popup.backgroundPage.playOrPause();
         }
     });
     Popup.init();

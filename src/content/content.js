@@ -3,16 +3,17 @@
 
         MUSIC_163_PLAYER_ID: '#g_player',
         UNIQUE_ID: '',
-        GET_MUSIC_ID_DELAY: 1000,
+        CHECK_MUSIC_CHANGE_DELAY: 500,
         CHECK_INIT_DELAY: 1000,
 
 
         playerInit: false,
+        isPlaying: '',
         currentSongID: '',
         connectPort: '',
 
         events: {
-            'click .prv': 'playPrev'
+            'click .ply': 'changePlayState'
         },
         afterInit: function () {
             var self = this;
@@ -28,12 +29,32 @@
             var self = this;
             var songID = '';
             setInterval(function () {
+                self.refreshPlayState();
+                self.sendSongProgressMessage();
                 songID = self.getSongID();
                 if(songID != self.currentSongID){
                     self.currentSongID = songID;
                     self.sendSongChangeMessage();
                 }
-            }, self.GET_MUSIC_ID_DELAY);
+            }, self.CHECK_MUSIC_CHANGE_DELAY);
+        },
+        sendSongProgressMessage: function () {
+            var self = this;
+            if(!self.isPlaying) return;
+            console.log('progress');
+            self.sendMessage({
+                type: Events.SONG_PROGRESS,
+                songInfo: self.getSongInfo()
+            });
+        },
+        refreshPlayState: function () {
+            this.isPlaying = $(this.MUSIC_163_PLAYER_ID + ' .ply').getAttribute('data-action') == 'pause';
+        },
+        changePlayState: function (e) {
+            if(this.getAttribute('data-action') == 'pause'){
+                Content.isPlaying = false;
+                Content.sendMessage({type: Events.SONG_PAUSE})
+            }
         },
         checkPlayerInit: function (callback) {
             var self = this;
@@ -53,7 +74,16 @@
         listenExtensionMessage: function () {
             var self = this;
             self.connectPort.onMessage.addListener(function (message) {
-                
+                switch (message.type){
+                    case Events.NEXT:
+                        self.playNext();
+                        break;
+                    case Events.PREV:
+                        self.playNext();
+                        break;
+                    case Events.STATE_CHANGE:
+                        self.playOrPause();
+                }
             })
         },
         sendSongChangeMessage: function () {
@@ -84,7 +114,8 @@
                 "singer_name": singerInfo.name,
                 "loaded": self.getSongLoaded(),
                 "played": self.getSongPlayed(),
-                "time": self.getSongTime()
+                "time": self.getSongTime(),
+                "playing": self.isPlaying
             }
         },
         getSingerInfo: function () {
@@ -116,16 +147,13 @@
             this.UNIQUE_ID = Util.generateUUID();
         },
         playPrev: function(){
-
+            $(this.MUSIC_163_PLAYER_ID + ' .prv').click();
         },
         playNext: function(){
-
+            $(this.MUSIC_163_PLAYER_ID + ' .nxt').click();
         },
-        play: function(){
-
-        },
-        pause: function(){
-
+        playOrPause: function(){
+            $(this.MUSIC_163_PLAYER_ID + ' .ply').click();
         }
     });
 
