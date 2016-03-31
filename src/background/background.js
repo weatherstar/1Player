@@ -7,6 +7,23 @@ var Background = Base.extend({
 
     afterInit: function () {
         this.listenContentMessage();
+        this.listenCommands();
+    },
+    listenCommands: function () {
+        var self = this;
+        chrome.commands.onCommand.addListener(function (command) {
+            switch (command){
+                case 'play-next':
+                    self.playNext();
+                    break;
+                case 'play-prev':
+                    self.playPrev();
+                    break;
+                case 'play-or-pause':
+                    self.playOrPause();
+                    break;
+            }
+        });
     },
     listenContentMessage: function () {
         var self = this;

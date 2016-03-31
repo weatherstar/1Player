@@ -88,7 +88,7 @@
                         self.playNext();
                         break;
                     case Events.PREV:
-                        self.playNext();
+                        self.playPrev();
                         break;
                     case Events.STATE_CHANGE:
                         self.playOrPause();

@@ -24,5 +24,28 @@
   "permissions": [
     "tabs",
     "activeTab"
-  ]
+  ],
+  "commands": {
+    "play-prev": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+8"
+      },
+      "description": "上一曲",
+      "global": true
+    },
+    "play-next": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+9"
+      },
+      "description": "下一曲",
+      "global": true
+    },
+    "play-or-pause": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+0"
+      },
+      "description": "播放或暂停",
+      "global": true
+    }
+  }
 }
