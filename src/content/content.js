@@ -1,20 +1,4 @@
 (function (_window) {
-
-    var eventMatchers = {
-        'HTMLEvents': /^(?:load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll)$/,
-        'MouseEvents': /^(?:click|dblclick|mouse(?:down|up|over|move|out))$/
-    };
-    var defaultOptions = {
-        pointerX: 0,
-        pointerY: 0,
-        button: 0,
-        ctrlKey: false,
-        altKey: false,
-        shiftKey: false,
-        metaKey: false,
-        bubbles: true,
-        cancelable: true
-    };
     var Content = Base.extend({
 
         MUSIC_163_PLAYER_ID: '#g_player',
@@ -27,6 +11,11 @@
         isPlaying: '',
         currentSongID: '',
         connectPort: '',
+        playType: {
+            "随机":"shuffle",
+            "单曲循环":"loop-one",
+            "循环":"loop"
+        },
 
         events: {
             'click .ply': 'changePlayState'
@@ -40,9 +29,8 @@
                 self.sendInitMessage();
                 self.listenMusicChange();
             });
-            $('#g_player .barbg.j-flag').addEventListener('click', function (e) {
-                console.log(e);
-            });
+            self.bindOtherEvents();
+
         },
         listenMusicChange: function () {
             var self = this;
@@ -57,9 +45,9 @@
                 }
             }, self.CHECK_MUSIC_CHANGE_DELAY);
         },
-        sendSongProgressMessage: function () {
+        sendSongProgressMessage: function (force) {
             var self = this;
-            if(!self.isPlaying) return;
+            if(!self.isPlaying&&!force) return;
             self.sendMessage({
                 type: Events.SONG_PROGRESS,
                 songInfo: self.getSongInfo()
@@ -84,6 +72,9 @@
                 }
             }, self.CHECK_INIT_DELAY)
         },
+        bindOtherEvents: function () {
+            $$(this.MUSIC_163_PLAYER_ID + ' .ctrl a')[1].addEventListener('click',this.sendPlayTypeChangeMessage)
+        },
         connectWithExtension: function () {
             var self = this;
             self.connectPort = chrome.runtime.connect({name: self.UNIQUE_ID});
@@ -105,8 +96,19 @@
                     case Events.TIME_CHANGE:
                         self.changeTime(message.percent);
                         break;
+                    case Events.PLAY_TYPE_CHANGE:
+                        self.changePlayType();
+                        break;
                 }
             })
+        },
+        sendPlayTypeChangeMessage: function () {
+            setTimeout(function () {
+                Content.sendMessage({
+                    type: Events.PLAY_TYPE_CHANGE,
+                    playType: Content.getPlayType()
+                });
+            },0);
         },
         sendSongChangeMessage: function () {
             var self = this;
@@ -137,7 +139,8 @@
                 "loaded": self.getSongLoaded(),
                 "played": self.getSongPlayed(),
                 "time": self.getSongTime(),
-                "playing": self.isPlaying
+                "playing": self.isPlaying,
+                "play_type": self.getPlayType()
             }
         },
         getSingerInfo: function () {
@@ -146,6 +149,10 @@
                 id: singerEl.getAttribute('href').match(/\d+/)[0],
                 name: singerEl.innerText
             };
+        },
+        getPlayType: function () {
+            var playTypeEL = $$(this.MUSIC_163_PLAYER_ID + ' .ctrl a')[1];
+            return this.playType[playTypeEL.title];
         },
         getSongPlayed: function () {
             return $(this.MUSIC_163_PLAYER_ID + ' .cur').style.width;
@@ -177,57 +184,18 @@
         playOrPause: function(){
             $(this.MUSIC_163_PLAYER_ID + ' .ply').click();
         },
+        changePlayType: function () {
+            $$(this.MUSIC_163_PLAYER_ID + ' .ctrl a')[1].click();
+        },
         changeTime: function(percent){
             var progressEL = $(this.MUSIC_163_PLAYER_ID + ' .barbg.j-flag');
-            var offsetX = progressEL.clientWidth * percent;
-            this.simulate(progressEL,'mousedown');
-
-        },
-        simulate: function(element, eventName)
-        {
-        var options = this.extend(defaultOptions, arguments[2] || {});
-        var oEvent, eventType = null;
-
-        for (var name in eventMatchers)
-        {
-            if (eventMatchers[name].test(eventName)) { eventType = name; break; }
+            var progress = progressEL.clientWidth * percent;
+            var rect = progressEL.getBoundingClientRect();
+            var evt = document.createEvent("MouseEvents");
+            evt.initMouseEvent("mousedown", true, true, _window, 0, 0, 0, rect.left + progress, rect.top, false, false, false, false, 0, null);
+            progressEL.dispatchEvent(evt);
+            this.sendSongProgressMessage(true);
         }
-
-        if (!eventType)
-            throw new SyntaxError('Only HTMLEvents and MouseEvents interfaces are supported');
-
-        if (document.createEvent)
-        {
-            oEvent = document.createEvent(eventType);
-            if (eventType == 'HTMLEvents')
-            {
-                oEvent.initEvent(eventName, options.bubbles, options.cancelable);
-            }
-            else
-            {
-                oEvent.initMouseEvent(eventName, options.bubbles, options.cancelable, document.defaultView,
-                    options.button, options.pointerX, options.pointerY, options.pointerX, options.pointerY,
-                    options.ctrlKey, options.altKey, options.shiftKey, options.metaKey, options.button, element);
-            }
-            element.dispatchEvent(oEvent);
-        }
-        else
-        {
-            options.clientX = options.pointerX;
-            options.clientY = options.pointerY;
-            var evt = document.createEventObject();
-            oEvent = extend(evt, options);
-            element.fireEvent('on' + eventName, oEvent);
-        }
-        return element;
-    },
-
-    extend: function(destination, source) {
-        for (var property in source)
-            destination[property] = source[property];
-        return destination;
-    }
-
     });
 
     Content.init();

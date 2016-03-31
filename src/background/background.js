@@ -37,6 +37,10 @@ var Background = Base.extend({
                     case  Events.SONG_PAUSE:
                         self.songInfo.playing = false;
                         self.sendMessageExtension(Events.SONG_PAUSE);
+                        break;
+                    case Events.PLAY_TYPE_CHANGE:
+                        self.songInfo.play_type = msg.playType;
+                        self.sendMessageExtension(Events.PLAY_TYPE_CHANGE);
 
                 }
             });
@@ -67,6 +71,9 @@ var Background = Base.extend({
     },
     changeTime: function(percent){
         this.sendMessageContent({type: Events.TIME_CHANGE, percent: percent});
+    },
+    changeContentPlayType: function () {
+         this.sendMessageContent({type: Events.PLAY_TYPE_CHANGE});
     },
     //向content发送消息
     sendMessageContent: function (message) {

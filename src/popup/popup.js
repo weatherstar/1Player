@@ -4,7 +4,8 @@
             'click .play-next': 'playNext',
             'click .play-prev': 'playPrev',
             'click .play': 'playOrPause',
-            'click .progress': 'changeTime'
+            'click .progress': 'changeTime',
+            'click .play-type': 'changeContentPlayType'
         },
 
         MUSIC_163_LINK: 'http://music.163.com/ ',
@@ -15,6 +16,7 @@
         playEL: $('.list-control .play'),
         loadedEL: $('.progress-loaded'),
         playedEL: $('.progress-played'),
+        playType: $('.play-type'),
         timeEL : $('.play-time'),
 
         playerInit: false,
@@ -50,6 +52,9 @@
                         break;
                     case  Events.SONG_PAUSE:
                         self.changePlayState();
+                        break;
+                    case Events.PLAY_TYPE_CHANGE:
+                        self.changePlayType();
                 }
             })
         },
@@ -58,6 +63,11 @@
         },
         changeProgress: function () {
             this.fillProgressDOM();
+        },
+        changePlayType: function () {
+            var icon = this.playType.querySelector('i');
+            icon.className = '';
+            icon.classList.add('icon-'+this.songInfo.play_type);
         },
         changePlayState: function () {
             if(this.songInfo.playing == this.playing)return;
@@ -95,6 +105,7 @@
             this.fillLoaded();
             this.fillPlayed();
             this.fillTime();
+            this.changePlayType();
             this.changePlayState();
         },
         fillSongName: function () {
@@ -127,6 +138,9 @@
         },
         playOrPause: function(){
             Popup.backgroundPage.playOrPause();
+        },
+        changeContentPlayType: function(){
+            Popup.backgroundPage.changeContentPlayType();
         }
     });
     Popup.init();

@@ -26,7 +26,7 @@
 }
 [class^="icon-"],[class*=" icon-"]{
   &:hover{
-    &:before{
+    &:before,&:after{
       color: #000;
     }
   }
@@ -76,4 +76,14 @@
 }
 .icon-loop:before {
   content: "\6a";
+}
+.icon-loop-one:before {
+  content: "\6a";
+}
+.icon-loop-one:after{
+  content:'1';
+  font-size: 10px;
+  color: #666;
+  font-style: normal;
+  vertical-align: top;
 }

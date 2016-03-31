@@ -9,6 +9,7 @@
         PLAY: 'PLAY',
         NEXT: 'NEXT',
         PREV: 'PREV',
-        RESET_PLAYER: 'RESET'
+        RESET_PLAYER: 'RESET',
+        PLAY_TYPE_CHANGE: 'PLAY_TYPE_CHANGE'
     };
 })(window);
