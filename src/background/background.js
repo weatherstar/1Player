@@ -92,6 +92,10 @@ var Background = Base.extend({
     changeContentPlayType: function () {
          this.sendMessageContent({type: Events.PLAY_TYPE_CHANGE});
     },
+    goPage: function (page) {
+        chrome.tabs.update(this.currentPort.sender.tab.id, {selected: true});
+        this.sendMessageContent({type: Events.GO_PAGE, page: page});
+    },
     //向content发送消息
     sendMessageContent: function (message) {
         this.currentPort.postMessage(message)

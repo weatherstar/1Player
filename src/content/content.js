@@ -9,6 +9,7 @@
 
         playerInit: false,
         isPlaying: '',
+        clickEL: null,
         currentSongID: '',
         connectPort: '',
         playType: {
@@ -29,6 +30,7 @@
                 self.sendInitMessage();
                 self.listenMusicChange();
             });
+            self.addGoPageElement();
             self.bindOtherEvents();
 
         },
@@ -52,6 +54,11 @@
                 type: Events.SONG_PROGRESS,
                 songInfo: self.getSongInfo()
             });
+        },
+        addGoPageElement: function () {
+            this.clickEL = document.createElement('a');
+            this.clickEL.id = 'on-player-go-page';
+            document.body.appendChild(this.clickEL);
         },
         refreshPlayState: function () {
             this.isPlaying = $(this.MUSIC_163_PLAYER_ID + ' .ply').getAttribute('data-action') == 'pause';
@@ -98,6 +105,9 @@
                         break;
                     case Events.PLAY_TYPE_CHANGE:
                         self.changePlayType();
+                        break;
+                    case Events.GO_PAGE:
+                        self.goPage(message.page);
                         break;
                 }
             })
@@ -186,6 +196,10 @@
         },
         changePlayType: function () {
             $$(this.MUSIC_163_PLAYER_ID + ' .ctrl a')[1].click();
+        },
+        goPage: function (page) {
+            this.clickEL.href = page;
+            this.clickEL.click();
         },
         changeTime: function(percent){
             var progressEL = $(this.MUSIC_163_PLAYER_ID + ' .barbg.j-flag');

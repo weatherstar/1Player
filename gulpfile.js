@@ -4,6 +4,8 @@ var del = require('del');
 
 var gulp = require('gulp');
 var uglify = require('gulp-uglify');
+var concat = require('gulp-concat');
+var util = require('gulp-util');
 var flatten = require('gulp-flatten');
 var less = require('gulp-less');
 var replace = require('gulp-replace');
@@ -24,36 +26,50 @@ var DIST_DIR = path.join(__dirname, 'dist');
 
 gulp.task('default', ['d']);
 
+//开发
 gulp.task('d', ['clean'], sequence('build','webserver','watch'));
 
+//生产
+gulp.task('p',['clean'],sequence('build'));
+
+gulp.task('buildConfig', function () {
+
+});
+gulp.task('publishConfig', function () {
+
+});
 gulp.task('build', function (callback) {
-    sequence('less', 'script', 'images', ['copy_html', 'copy_fonts','copy_other'])(callback)
+    sequence('less', 'concat','uglify', 'images', ['copy_html', 'copy_fonts','copy_other'])(callback)
 });
 
 gulp.task('clean', function () {
     return del(DIST_DIR);
 });
 
-gulp.task('script', function () {
+gulp.task('concat', function () {
+    return gulp.src(['./src/utils/'])
+});
+
+gulp.task('uglify', function () {
    return gulp.src(path.join(SRC_DIR, '**', '*.js'))
-       .pipe(sourcemaps.init({loadMaps: true}))
+       .pipe(util.evn.p?function(){}:sourcemaps.init({loadMaps: true}))
        .pipe(uglify({
            compress:{
-               drop_debugger: false
+               drop_debugger: util.env.p?true:false
            }
        }))
-       .pipe(sourcemaps.write('./'))
+       .pipe(util.evn.p?function(){}:sourcemaps.write('./'))
        .pipe(flatten())
        .pipe(gulp.dest(DIST_DIR + '/js'));
 });
 
 gulp.task('less', function () {
     return gulp.src(path.join(SRC_DIR, '**', '*.less'))
-        .pipe(sourcemaps.init({loadMaps: true}))
+        .pipe(util.evn.p?function(){}:sourcemaps.init({loadMaps: true}))
         .pipe(less({
             plugins: [autoprefix, cleancss]
         }))
-        .pipe(sourcemaps.write('./'))
+        .pipe(util.evn.p?function(){}:sourcemaps.write('./'))
         .pipe(flatten())
         .pipe(gulp.dest(DIST_DIR + '/css'));
 });

@@ -5,7 +5,8 @@
             'click .play-prev': 'playPrev',
             'click .play': 'playOrPause',
             'click .progress': 'changeTime',
-            'click .play-type': 'changeContentPlayType'
+            'click .play-type': 'changeContentPlayType',
+            'click .clickable': 'goPage'
         },
 
         MUSIC_163_LINK: 'http://music.163.com/ ',
@@ -141,6 +142,9 @@
         },
         changeContentPlayType: function(){
             Popup.backgroundPage.changeContentPlayType();
+        },
+        goPage: function(){
+            Popup.backgroundPage.goPage(this.getAttribute('data-src'));
         }
     });
     Popup.init();
