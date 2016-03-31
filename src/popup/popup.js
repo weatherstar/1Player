@@ -3,7 +3,8 @@
         events: {
             'click .play-next': 'playNext',
             'click .play-prev': 'playPrev',
-            'click .play': 'playOrPause'
+            'click .play': 'playOrPause',
+            'click .progress': 'changeTime'
         },
 
         MUSIC_163_LINK: 'http://music.163.com/ ',
@@ -20,6 +21,7 @@
         currentPageID:'',
         songInfo: null,
         backgroundPage: null,
+        playing: false,
 
         afterInit: function () {
             if(this.checkInit()){
@@ -58,10 +60,12 @@
             this.fillProgressDOM();
         },
         changePlayState: function () {
+            if(this.songInfo.playing == this.playing)return;
             var addClass = this.songInfo.playing? 'icon-pause':'icon-play';
             var removeClass = this.songInfo.playing? 'icon-play':'icon-pause';
             this.playEL.classList.remove(removeClass);
             this.playEL.classList.add(addClass);
+            this.playing = this.songInfo.playing;
         },
         checkInit: function () {
             return this.getBackgroundPage().playerInit;
@@ -75,10 +79,14 @@
         refreshSongInfo: function () {
             this.songInfo = this.getSongInfo();
         },
+        changeTime: function (e) {
+            Popup.backgroundPage.changeTime(e.offsetX/this.clientWidth);
+        },
         fillProgressDOM: function () {
             this.fillLoaded();
             this.fillPlayed();
             this.fillTime();
+            this.changePlayState();
         },
         fillPlayerDOM: function () {
             this.fillSongName();

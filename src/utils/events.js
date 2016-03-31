@@ -2,6 +2,7 @@
     _window.Events = {
         INIT_PLAYER: 'INIT',
         SONG_CHANGE: 'SONG_CHANGE',
+        TIME_CHANGE: 'TIME_CHANGE',
         SONG_PROGRESS: 'SONG_PROGRESS',
         SONG_PAUSE: 'PAUSE',
         STATE_CHANGE: 'STATE_CHANGE',

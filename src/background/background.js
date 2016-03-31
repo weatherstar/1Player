@@ -65,6 +65,9 @@ var Background = Base.extend({
     playOrPause: function () {
         this.sendMessageContent({type: Events.STATE_CHANGE});
     },
+    changeTime: function(percent){
+        this.sendMessageContent({type: Events.TIME_CHANGE, percent: percent});
+    },
     //向content发送消息
     sendMessageContent: function (message) {
         this.currentPort.postMessage(message)

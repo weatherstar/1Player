@@ -1,4 +1,20 @@
 (function (_window) {
+
+    var eventMatchers = {
+        'HTMLEvents': /^(?:load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll)$/,
+        'MouseEvents': /^(?:click|dblclick|mouse(?:down|up|over|move|out))$/
+    };
+    var defaultOptions = {
+        pointerX: 0,
+        pointerY: 0,
+        button: 0,
+        ctrlKey: false,
+        altKey: false,
+        shiftKey: false,
+        metaKey: false,
+        bubbles: true,
+        cancelable: true
+    };
     var Content = Base.extend({
 
         MUSIC_163_PLAYER_ID: '#g_player',
@@ -24,6 +40,9 @@
                 self.sendInitMessage();
                 self.listenMusicChange();
             });
+            $('#g_player .barbg.j-flag').addEventListener('click', function (e) {
+                console.log(e);
+            });
         },
         listenMusicChange: function () {
             var self = this;
@@ -41,7 +60,6 @@
         sendSongProgressMessage: function () {
             var self = this;
             if(!self.isPlaying) return;
-            console.log('progress');
             self.sendMessage({
                 type: Events.SONG_PROGRESS,
                 songInfo: self.getSongInfo()
@@ -83,6 +101,10 @@
                         break;
                     case Events.STATE_CHANGE:
                         self.playOrPause();
+                        break;
+                    case Events.TIME_CHANGE:
+                        self.changeTime(message.percent);
+                        break;
                 }
             })
         },
@@ -154,7 +176,58 @@
         },
         playOrPause: function(){
             $(this.MUSIC_163_PLAYER_ID + ' .ply').click();
+        },
+        changeTime: function(percent){
+            var progressEL = $(this.MUSIC_163_PLAYER_ID + ' .barbg.j-flag');
+            var offsetX = progressEL.clientWidth * percent;
+            this.simulate(progressEL,'mousedown');
+
+        },
+        simulate: function(element, eventName)
+        {
+        var options = this.extend(defaultOptions, arguments[2] || {});
+        var oEvent, eventType = null;
+
+        for (var name in eventMatchers)
+        {
+            if (eventMatchers[name].test(eventName)) { eventType = name; break; }
         }
+
+        if (!eventType)
+            throw new SyntaxError('Only HTMLEvents and MouseEvents interfaces are supported');
+
+        if (document.createEvent)
+        {
+            oEvent = document.createEvent(eventType);
+            if (eventType == 'HTMLEvents')
+            {
+                oEvent.initEvent(eventName, options.bubbles, options.cancelable);
+            }
+            else
+            {
+                oEvent.initMouseEvent(eventName, options.bubbles, options.cancelable, document.defaultView,
+                    options.button, options.pointerX, options.pointerY, options.pointerX, options.pointerY,
+                    options.ctrlKey, options.altKey, options.shiftKey, options.metaKey, options.button, element);
+            }
+            element.dispatchEvent(oEvent);
+        }
+        else
+        {
+            options.clientX = options.pointerX;
+            options.clientY = options.pointerY;
+            var evt = document.createEventObject();
+            oEvent = extend(evt, options);
+            element.fireEvent('on' + eventName, oEvent);
+        }
+        return element;
+    },
+
+    extend: function(destination, source) {
+        for (var property in source)
+            destination[property] = source[property];
+        return destination;
+    }
+
     });
 
     Content.init();
