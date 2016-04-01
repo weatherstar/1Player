@@ -27,11 +27,9 @@
         playing: false,
 
         afterInit: function () {
-            if(this.checkInit()){
-                this.refreshSongInfo();
-                this.initPlayer();
-            }
             this.backgroundPage = this.getBackgroundPage();
+            this.refreshSongInfo();
+            this.initPlayer();
             this.listenExtensionMessage();
         },
         initPlayer: function () {
@@ -56,6 +54,10 @@
                         break;
                     case Events.PLAY_TYPE_CHANGE:
                         self.changePlayType();
+                        break;
+                    case Events.RESET_PLAYER:
+                        self.resetPlayer();
+                        break;
                 }
             })
         },
@@ -89,6 +91,9 @@
         },
         refreshSongInfo: function () {
             this.songInfo = this.getSongInfo();
+        },
+        resetPlayer: function () {
+          this.fillPlayerDOM();
         },
         changeTime: function (e) {
             Popup.backgroundPage.changeTime(e.offsetX/this.clientWidth);

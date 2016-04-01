@@ -1,7 +1,7 @@
 (function (_window) {
     var Content = Base.extend({
 
-        MUSIC_163_PLAYER_ID: '#g_player',
+        MUSIC_163_PLAYER_ID: Config.music_163_player_id,
         UNIQUE_ID: '',
         CHECK_MUSIC_CHANGE_DELAY: 500,
         CHECK_INIT_DELAY: 1000,
@@ -145,7 +145,7 @@
                 "song_img": self.getSongImage(),
                 "song_name": self.getSongName(),
                 "singer_id": singerInfo.id,
-                "singer_name": singerInfo.name,
+                "singer_name": '-'+ singerInfo.name,
                 "loaded": self.getSongLoaded(),
                 "played": self.getSongPlayed(),
                 "time": self.getSongTime(),

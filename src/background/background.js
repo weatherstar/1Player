@@ -4,8 +4,21 @@ var Background = Base.extend({
     currentPageID:'',
     currentPort: null,
     songInfo: null,
+    defaultSongInfo: {
+        "song_id": 0,
+        "song_img": "./imgs/default_music_pic_163.jpeg",
+        "song_name": "打开网易云音乐",
+        "singer_id": 0,
+        "singer_name": "",
+        "loaded": 0,
+        "played": 0,
+        "time": "00:00 / 00:00",
+        "playing": false,
+        "play_type": 'loop'
+    },
 
     afterInit: function () {
+        this.songInfo = this.defaultSongInfo;
         this.listenContentMessage();
         this.listenCommands();
     },
@@ -76,6 +89,7 @@ var Background = Base.extend({
         this.playerInit = false;
         this.currentPageID = '';
         this.currentPort = null;
+        this.songInfo = this.defaultSongInfo;
     },
     playNext: function () {
       this.sendMessageContent({type: Events.NEXT});
@@ -93,8 +107,12 @@ var Background = Base.extend({
          this.sendMessageContent({type: Events.PLAY_TYPE_CHANGE});
     },
     goPage: function (page) {
-        chrome.tabs.update(this.currentPort.sender.tab.id, {selected: true});
-        this.sendMessageContent({type: Events.GO_PAGE, page: page});
+        if(this.currentPort){
+            chrome.tabs.update(this.currentPort.sender.tab.id, {selected: true});
+            this.sendMessageContent({type: Events.GO_PAGE, page: page});
+        }else{
+            chrome.tabs.create({ url: Config.music_163_url });
+        }
     },
     //向content发送消息
     sendMessageContent: function (message) {
