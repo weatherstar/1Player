@@ -8,11 +8,11 @@
   "content_scripts":[
     {
       "matches": ["http://music.163.com/*"],
-      "js": ["js/querySelect.js", "js/base.js","js/util.js", "js/events.js", "js/content.js"]
+      "js": ["js/util.js", "js/content.js"]
     }
   ],
   "background": {
-    "scripts": ["js/base.js","js/util.js", "js/events.js","js/background.js"],
+    "scripts": ["js/util.js","js/background.js"],
     "persistent": true
   },
 

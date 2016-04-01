@@ -7,8 +7,10 @@ var uglify = require('gulp-uglify');
 var concat = require('gulp-concat');
 var util = require('gulp-util');
 var flatten = require('gulp-flatten');
+var gulpif = require('gulp-if');
 var less = require('gulp-less');
 var replace = require('gulp-replace');
+var runSequence = require('run-sequence');
 var sequence = require('gulp-sequence').use(gulp);
 var sourcemaps = require('gulp-sourcemaps');
 var webserver = require('gulp-webserver');
@@ -23,53 +25,64 @@ var autoprefix= new LessPluginAutoPrefix({ browsers: ["last 2 versions"] });
 
 var SRC_DIR = path.join(__dirname, 'src');
 var DIST_DIR = path.join(__dirname, 'dist');
+var TEMP_DIR = path.join(__dirname, 'temp');
 
 gulp.task('default', ['d']);
 
 //开发
-gulp.task('d', ['clean'], sequence('build','webserver','watch'));
+gulp.task('d', ['cleanBuild'], function () {
+    global.isPublish = false;
+    runSequence('build','webserver','watch');
+});
 
 //生产
-gulp.task('p',['clean'],sequence('build'));
-
-gulp.task('buildConfig', function () {
-
+gulp.task('p',['cleanBuild'], function () {
+    global.isPublish = true;
+    runSequence('build');
 });
-gulp.task('publishConfig', function () {
 
-});
 gulp.task('build', function (callback) {
-    sequence('less', 'concat','uglify', 'images', ['copy_html', 'copy_fonts','copy_other'])(callback)
+    sequence('less', 'concat','uglify', 'images', ['copy_html', 'copy_fonts','copy_other'],'cleanTemp')(callback)
 });
 
-gulp.task('clean', function () {
+gulp.task('cleanBuild', function () {
     return del(DIST_DIR);
+});
+gulp.task('cleanTemp', function () {
+    return del(TEMP_DIR);
 });
 
 gulp.task('concat', function () {
-    return gulp.src(['./src/utils/'])
+    return gulp.src([
+        './src/utils/querySelect.js',
+        './src/utils/events.js',
+        './src/utils/util.js',
+        './src/utils/base.js'
+    ]).pipe(concat('util.js'))
+        .pipe(flatten())
+        .pipe(gulp.dest(TEMP_DIR))
 });
 
 gulp.task('uglify', function () {
-   return gulp.src(path.join(SRC_DIR, '**', '*.js'))
-       .pipe(util.evn.p?function(){}:sourcemaps.init({loadMaps: true}))
+   return gulp.src([path.join(SRC_DIR, '**', '*.js'),'!'+ path.join(SRC_DIR, 'utils','*.js'),path.join(TEMP_DIR, '**', '*.js')])
+       .pipe(gulpif(!isPublish,sourcemaps.init({loadMaps: true})))
        .pipe(uglify({
            compress:{
-               drop_debugger: util.env.p?true:false
+               drop_debugger: isPublish
            }
        }))
-       .pipe(util.evn.p?function(){}:sourcemaps.write('./'))
+       .pipe(gulpif(!isPublish,sourcemaps.write('./')))
        .pipe(flatten())
        .pipe(gulp.dest(DIST_DIR + '/js'));
 });
 
 gulp.task('less', function () {
     return gulp.src(path.join(SRC_DIR, '**', '*.less'))
-        .pipe(util.evn.p?function(){}:sourcemaps.init({loadMaps: true}))
+        .pipe(gulpif(!isPublish,sourcemaps.init({loadMaps: true})))
         .pipe(less({
             plugins: [autoprefix, cleancss]
         }))
-        .pipe(util.evn.p?function(){}:sourcemaps.write('./'))
+        .pipe(gulpif(!isPublish,sourcemaps.write('./')))
         .pipe(flatten())
         .pipe(gulp.dest(DIST_DIR + '/css'));
 });
