@@ -98,7 +98,29 @@ var Background = Base.extend({
         this.sendMessageContent({type: Events.PREV});
     },
     playOrPause: function () {
+        var self = this;
+        if(!self.currentPort){
+            self.goPage();
+            return;
+        }
+        //如果当前是播放mv的界面 先跳转至各取洁面再播放
+        if(!self.songInfo.isPlaying){
+            self.isMVPage(function (mvPage) {
+                mvPage && self.goPage('/song?id='+ self.songInfo.song_id);
+            });
+        }
         this.sendMessageContent({type: Events.STATE_CHANGE});
+    },
+    isMVPage: function (callback) {
+        var self = this;
+        callback = callback || Util.noop;
+        chrome.tabs.query({url:"http://music.163.com/*"}, function (tabs) {
+            tabs.forEach(function (tab) {
+                if(tab.id = self.currentPort.sender.tab.id){
+                    callback(/http:\/\/music\.163\.com\/\#\/mv\?id=\d+/gi.test(tab.url));
+                }
+            });
+        });
     },
     changeTime: function(percent){
         this.sendMessageContent({type: Events.TIME_CHANGE, percent: percent});

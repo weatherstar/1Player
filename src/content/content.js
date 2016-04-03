@@ -61,7 +61,11 @@
             document.body.appendChild(this.clickEL);
         },
         refreshPlayState: function () {
-            this.isPlaying = $(this.MUSIC_163_PLAYER_ID + ' .ply').getAttribute('data-action') == 'pause';
+            var state = $(this.MUSIC_163_PLAYER_ID + ' .ply').getAttribute('data-action') == 'pause';
+            if (this.isPlaying != state && state == false){
+                this.sendMessage({type: Events.SONG_PAUSE});
+            }
+            this.isPlaying = state;
         },
         changePlayState: function (e) {
             if(this.getAttribute('data-action') == 'pause'){
@@ -76,6 +80,8 @@
                 if(songName!=''){
                     clearInterval(interval);
                     callback && callback();
+                }else{
+                    songName = self.getSongName();
                 }
             }, self.CHECK_INIT_DELAY)
         },
@@ -157,7 +163,7 @@
             var singerEl = $(this.MUSIC_163_PLAYER_ID + ' .by a');
             return {
                 id: singerEl.getAttribute('href').match(/\d+/)[0],
-                name: singerEl.innerText
+                name: singerEl.innerHTML
             };
         },
         getPlayType: function () {
@@ -174,13 +180,13 @@
             return $(this.MUSIC_163_PLAYER_ID + ' .head img').src.replace(/34y34/gi,'130y130');
         },
         getSongTime: function () {
-            return $(this.MUSIC_163_PLAYER_ID + ' .time').innerText;
+            return $(this.MUSIC_163_PLAYER_ID + ' .time').innerHTML.replace(/<\/*em>/gi,'');
         },
         getSongID: function () {
             return $(this.MUSIC_163_PLAYER_ID + ' .name').getAttribute('href').match(/\d+/)[0];
         },
         getSongName: function(){
-            return $(this.MUSIC_163_PLAYER_ID + ' .name').innerText;
+            return $(this.MUSIC_163_PLAYER_ID + ' .name').innerHTML;
         },
         getPageUniqueID: function () {
             this.UNIQUE_ID = Util.generateUUID();
