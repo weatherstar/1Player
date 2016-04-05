@@ -2,7 +2,7 @@
   "manifest_version": 2 ,
 
   "name": "1Player",
-  "description": "A chrome extension can control the player of music website.",
+  "description": "A chrome extension can control the player of music.163.com.",
   "version": "1.0",
 
   "content_scripts":[
@@ -15,17 +15,29 @@
     "scripts": ["js/util.js","js/background.js"],
     "persistent": true
   },
-
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
   "browser_action": {
-    "default_icon": "icon.png",
+    "default_icon": "icon16.png",
     "default_popup": "popup.html",
     "default_title": "1Player"
   },
   "permissions": [
     "tabs",
-    "activeTab"
+    "activeTab",
+    "clipboardWrite"
   ],
   "commands": {
+    "copy-song": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+7"
+      },
+      "description": "拷贝当前曲目至剪贴板",
+      "global": true
+    },
     "play-prev": {
       "suggested_key": {
         "default": "Ctrl+Shift+8"

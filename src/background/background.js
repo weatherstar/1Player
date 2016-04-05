@@ -4,6 +4,7 @@ var Background = Base.extend({
     currentPageID:'',
     currentPort: null,
     songInfo: null,
+    inputEl: document.createElement('input'),
     defaultSongInfo: {
         "song_id": 0,
         "song_img": "./imgs/default_music_pic_163.jpeg",
@@ -18,6 +19,7 @@ var Background = Base.extend({
     },
 
     afterInit: function () {
+        document.body.appendChild(this.inputEl);
         this.songInfo = this.defaultSongInfo;
         this.listenContentMessage();
         this.listenCommands();
@@ -35,6 +37,8 @@ var Background = Base.extend({
                 case 'play-or-pause':
                     self.playOrPause();
                     break;
+                case 'copy-song':
+                    self.copySongLinkToClipboard();
             }
         });
     },
@@ -96,6 +100,13 @@ var Background = Base.extend({
     },
     playPrev: function () {
         this.sendMessageContent({type: Events.PREV});
+    },
+    copySongLinkToClipboard: function () {
+        if(this.currentPort){
+            this.inputEl.value = Config.music_163_url + '#/song?id=' + this.songInfo.song_id;
+            this.inputEl.select();
+            document.execCommand('copy');
+        }
     },
     playOrPause: function () {
         var self = this;

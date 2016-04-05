@@ -8,6 +8,7 @@ var concat = require('gulp-concat');
 var util = require('gulp-util');
 var flatten = require('gulp-flatten');
 var gulpif = require('gulp-if');
+var zip = require('gulp-zip');
 var less = require('gulp-less');
 var replace = require('gulp-replace');
 var runSequence = require('run-sequence');
@@ -38,7 +39,7 @@ gulp.task('d', ['cleanBuild'], function () {
 //生产
 gulp.task('p',['cleanBuild'], function () {
     global.isPublish = true;
-    runSequence('build');
+    runSequence('build', 'zip');
 });
 
 gulp.task('build', function (callback) {
@@ -115,9 +116,15 @@ gulp.task('copy_fonts', function () {
 });
 
 gulp.task('copy_other', function () {
-    return gulp.src([path.join(__dirname, 'manifest.json'), path.join(__dirname, 'icon.png')])
+    return gulp.src([path.join(__dirname, 'manifest.json'), path.join(__dirname, '*.png')])
         .pipe(flatten())
         .pipe(gulp.dest(DIST_DIR));
+});
+
+gulp.task('zip', function () {
+    return gulp.src(path.join(DIST_DIR,'**/**.*'))
+        .pipe(zip('1Player.zip'))
+        .pipe(gulp.dest(__dirname));
 });
 
 gulp.task('webserver', function () {
