@@ -39,7 +39,13 @@ gulp.task('d', ['cleanBuild'], function () {
 //生产
 gulp.task('p',['cleanBuild'], function () {
     global.isPublish = true;
-    runSequence('build', 'zip');
+    runSequence('build');
+});
+
+//发布到chrome的包
+gulp.task('c',['cleanBuild'], function () {
+    global.isPublish = true;
+    runSequence('p','zip');
 });
 
 gulp.task('build', function (callback) {
