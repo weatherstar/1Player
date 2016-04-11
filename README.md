@@ -9,6 +9,8 @@
 ![image](http://7xls2e.com1.z0.glb.clouddn.com/1player_2.png)
 
 ##Version
+####1.0.2
+-   修改了一些bug
 ####1.0.1
 -   插件面板同步当前播放歌曲信息
 -   插件面板可控制 上一曲、下一曲、暂停/播放、播放进度、播放模式

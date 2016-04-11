@@ -1,6 +1,6 @@
 {
   "name": "1player",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "A chrome extension can control the player of music website.",
   "main": "index.js",
   "scripts": {
