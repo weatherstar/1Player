@@ -1,6 +1,8 @@
 # 1Player for music.163.com
 使用1Player控制你的网易云音乐播放器，通过快捷键可以在做其他工作时方便地控制歌曲免除来回切换的烦恼。
 
+样式参考 [APlayer](https://www.anotherhome.net/file/APlayer/)
+
 ####[下载地址](https://chrome.google.com/webstore/detail/1player/bbleianliopbinjkpnmnhikiplblaifl?hl=zh-CN)
 ##Introduction
 ####Screenshot
