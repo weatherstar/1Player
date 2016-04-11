@@ -2,8 +2,8 @@
   "manifest_version": 2 ,
 
   "name": "1Player",
-  "description": "A chrome extension can control the player of music.163.com.",
-  "version": "1.0",
+  "description": "使用1Player控制你的网易云音乐播放器，通过快捷键可以在做其他工作时方便地控制歌曲免除来回切换的烦恼。",
+  "version": "1.0.1",
 
   "content_scripts":[
     {

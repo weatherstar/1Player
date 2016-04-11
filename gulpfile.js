@@ -43,7 +43,7 @@ gulp.task('p',['cleanBuild'], function () {
 });
 
 //发布到chrome的包
-gulp.task('c',['cleanBuild'], function () {
+gulp.task('c', function () {
     global.isPublish = true;
     runSequence('p','zip');
 });
