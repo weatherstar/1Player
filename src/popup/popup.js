@@ -124,7 +124,7 @@
             this.songImageEl.querySelector('img').src = this.songInfo.song_img;
         },
         fillSingerName: function () {
-            this.singerNameEl.innerText = this.songInfo.singer_name;
+            this.singerNameEl.innerHTML = this.songInfo.singer_name;
             $('.singer-name').setAttribute('data-src','/artist?id='+ this.songInfo.singer_id);
         },
         fillPlayed: function () {
