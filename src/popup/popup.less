@@ -33,6 +33,7 @@
   .one-player-info{
     margin-left: @playPicWidth;
     padding: 14px 7px 0 10px;
+    height: 86px;
     .one-player-name{
       overflow: hidden;
       white-space: nowrap;
@@ -128,6 +129,63 @@
         .play-type{
           font-size: 15px;
           width: 22px;
+        }
+      }
+    }
+  }
+  .one-player-song-list{
+    max-height: 300px;
+    overflow: auto;
+    -webkit-transition: all .5s ease;
+    transition: all .5s ease;
+    .f-cb{
+      li{
+        position: relative;
+        height: 32px;
+        line-height: 32px;
+        padding: 0 15px;
+        font-size: 12px;
+        border-top: 1px solid #e9e9e9;
+        cursor: pointer;
+        transition: all .2s ease;
+        overflow: hidden;
+        &.z-sel{
+          background: #e9e9e9;
+          &:hover{
+            background: #e9e9e9;
+          }
+          .col-1{
+            display: inline-block;
+          }
+        }
+        &:hover{
+          background: #efefef;
+        }
+        .col{
+          display: inline-block;
+          vertical-align: middle;
+        }
+        .col-1{
+          display: none;
+          background: #ff4500;
+          width: 3px;
+          height: 22px;
+          position: absolute;
+          left: 0;
+          top: 5px;
+          cursor: pointer;
+        }
+        .col-4{
+          float: right;
+          a{
+            text-decoration: none;
+            &:link,&:visited,&:hover,&:active{
+              color: #666;
+            }
+          }
+        }
+        .col-3,.col-5,.col-6{
+          display: none;
         }
       }
     }
