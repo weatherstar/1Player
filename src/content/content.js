@@ -2,6 +2,7 @@
     var Content = Base.extend({
 
         MUSIC_163_PLAYER_ID: Config.music_163_player_id,
+        MUSIC_163_LIST_ID: Config.music_163_player_list_id,
         UNIQUE_ID: '',
         CHECK_MUSIC_CHANGE_DELAY: 500,
         CHECK_INIT_DELAY: 1000,
@@ -115,6 +116,8 @@
                     case Events.GO_PAGE:
                         self.goPage(message.page);
                         break;
+                    case Events.CLICK_SONG_LIST_ITEM:
+                        self.selectSongInSongList(message.id);
                 }
             })
         },
@@ -215,6 +218,12 @@
             evt.initMouseEvent("mousedown", true, true, _window, 0, 0, 0, rect.left + progress, rect.top, false, false, false, false, 0, null);
             progressEL.dispatchEvent(evt);
             this.sendSongProgressMessage(true);
+        },
+        selectSongInSongList: function(){
+            var songListEl = $(this.MUSIC_163_LIST_ID);
+            if(!songListEl){
+                
+            }
         }
     });
 

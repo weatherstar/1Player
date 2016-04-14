@@ -137,7 +137,10 @@ var Background = Base.extend({
         this.sendMessageContent({type: Events.TIME_CHANGE, percent: percent});
     },
     changeContentPlayType: function () {
-         this.sendMessageContent({type: Events.PLAY_TYPE_CHANGE});
+        this.sendMessageContent({type: Events.PLAY_TYPE_CHANGE});
+    },
+    clickSongListItem: function (id) {
+        this.sendMessageContent({type: Events.CLICK_SONG_LIST_ITEM, id: id})
     },
     goPage: function (page) {
         if(this.currentPort){

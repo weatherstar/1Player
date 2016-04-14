@@ -9,6 +9,9 @@
             });
             return uuid;
         },
+        closet: function () {
+
+        },
         noop: function(){}
     }
 })(window);

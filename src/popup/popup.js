@@ -6,7 +6,8 @@
             'click .play': 'playOrPause',
             'click .progress': 'changeTime',
             'click .play-type': 'changeContentPlayType',
-            'click .clickable': 'goPage'
+            'click .clickable': 'goPage',
+            'click .one-player-song-list': 'handleSongList'
         },
 
         MUSIC_163_LINK: 'http://music.163.com/ ',
@@ -97,6 +98,25 @@
         },
         changeTime: function (e) {
             Popup.backgroundPage.changeTime(e.offsetX/this.clientWidth);
+        },
+        handleSongList: function (e) {
+            var target = e.target,
+                liArray = null,
+                currentLi = e.target.closest('li');
+            e.preventDefault();
+            if(Popup.isInSongList(target)){
+                liArray = Array.prototype.slice.apply(document.getElementsByClassName('f-cb')[0].querySelectorAll('li'));
+                liArray.forEach(function (li) {
+                   if(li.classList.contains('z-sel')){
+                       li.classList.remove('z-sel');
+                   }
+                });
+                currentLi.classList.add('z-sel');
+            }
+            Popup.backgroundPage.clickSongListItem(currentLi.getAttribute('data-id'));
+        },
+        isInSongList: function (el) {
+          return  document.getElementsByClassName('f-cb')[0] && document.getElementsByClassName('f-cb')[0].contains(el);
         },
         fillProgressDOM: function () {
             this.fillLoaded();
