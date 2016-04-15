@@ -22,6 +22,9 @@
         events: {
             'click .ply': 'changePlayState'
         },
+
+        listIconEL: $('.icn.icn-list'),
+
         afterInit: function () {
             var self = this;
             self.getPageUniqueID();
@@ -118,6 +121,9 @@
                         break;
                     case Events.CLICK_SONG_LIST_ITEM:
                         self.selectSongInSongList(message.id);
+                        break;
+                    case Events.REQUEST_SONG_LIST:
+                        self.sendSongList();
                 }
             })
         },
@@ -128,6 +134,15 @@
                     playType: Content.getPlayType()
                 });
             },0);
+        },
+        sendSongList: function () {
+            var self = this;
+            this.getSongList(function (songList) {
+                self.sendMessage({
+                    type: Events.RESPONSE_SONG_LIST,
+                    songList: songList
+                })
+            });
         },
         sendSongChangeMessage: function () {
             var self = this;
@@ -145,6 +160,30 @@
         },
         sendMessage: function (message) {
             this.connectPort.postMessage(message);
+        },
+        getSongList: function (callback) {
+            callback = callback || Util.noop;
+            this.showSongList(function (songList) {
+                callback(songList.querySelector('.listbdc.j-flag').innerHTML);
+            });
+        },
+        showSongList: function (callback) {
+            var songListEl = $(this.MUSIC_163_LIST_ID);
+            var interval = null;
+            var self = this;
+            callback = callback || Util.noop;
+            if(!songListEl){
+                self.listIconEL.click();
+                interval = setInterval(function () {
+                    songListEl = $(self.MUSIC_163_LIST_ID);
+                    if(songListEl){
+                        callback(songListEl);
+                        clearInterval(interval);
+                    }
+                },10);
+            }else{
+                callback(songListEl);
+            }
         },
         getSongInfo: function () {
             var self = this;
@@ -220,10 +259,7 @@
             this.sendSongProgressMessage(true);
         },
         selectSongInSongList: function(){
-            var songListEl = $(this.MUSIC_163_LIST_ID);
-            if(!songListEl){
-                
-            }
+
         }
     });
 

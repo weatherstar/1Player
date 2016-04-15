@@ -134,10 +134,18 @@
     }
   }
   .one-player-song-list{
+    height: 0;
     max-height: 300px;
     overflow: auto;
     -webkit-transition: all .5s ease;
     transition: all .5s ease;
+    .loading{
+      height: 300px;
+      line-height: 300px;
+      text-align: center;
+      font-size: 16px;
+      color: #999;
+    }
     .f-cb{
       li{
         position: relative;

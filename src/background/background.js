@@ -75,7 +75,10 @@ var Background = Base.extend({
                     case Events.PLAY_TYPE_CHANGE:
                         self.songInfo.play_type = msg.playType;
                         self.sendMessageExtension(Events.PLAY_TYPE_CHANGE);
-
+                        break;
+                    case Events.RESPONSE_SONG_LIST:
+                        self.songList = msg.songList;
+                        self.sendMessageExtension(Events.RESPONSE_SONG_LIST);
                 }
             });
             port.onDisconnect.addListener(function (port) {
@@ -138,6 +141,9 @@ var Background = Base.extend({
     },
     changeContentPlayType: function () {
         this.sendMessageContent({type: Events.PLAY_TYPE_CHANGE});
+    },
+    requestSongList: function () {
+        this.sendMessageContent({type: Events.REQUEST_SONG_LIST});
     },
     clickSongListItem: function (id) {
         this.sendMessageContent({type: Events.CLICK_SONG_LIST_ITEM, id: id})

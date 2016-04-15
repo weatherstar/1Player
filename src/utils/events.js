@@ -12,6 +12,8 @@
         PREV:                 'PREV',
         RESET_PLAYER:         'RESET',
         PLAY_TYPE_CHANGE:     'PLAY_TYPE_CHANGE',
-        CLICK_SONG_LIST_ITEM: 'CLICK_SONG_LIST_ITEM'
+        CLICK_SONG_LIST_ITEM: 'CLICK_SONG_LIST_ITEM',
+        REQUEST_SONG_LIST:    'REQUEST_SONG_LIST',
+        RESPONSE_SONG_LIST:   'RESPONSE_SONG_LIST'
     };
 })(window);

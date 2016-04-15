@@ -6,11 +6,13 @@
             'click .play': 'playOrPause',
             'click .progress': 'changeTime',
             'click .play-type': 'changeContentPlayType',
+            'click .play-list': 'toggleSongList',
             'click .clickable': 'goPage',
             'click .one-player-song-list': 'handleSongList'
         },
 
         MUSIC_163_LINK: 'http://music.163.com/ ',
+        SONG_LIST_HEIGHT: '300px',
 
         songNameEL: $('.song-name'),
         songImageEl: $('.song-pic'),
@@ -20,6 +22,8 @@
         playedEL: $('.progress-played'),
         playType: $('.play-type'),
         timeEL : $('.play-time'),
+        songListEl: $('.one-player-song-list'),
+        songListLoadingEl: $('#loading-song-list'),
 
         playerInit: false,
         currentPageID:'',
@@ -59,6 +63,9 @@
                     case Events.RESET_PLAYER:
                         self.resetPlayer();
                         break;
+                    case Events.RESPONSE_SONG_LIST:
+                        self.fillSongList();
+                        break;
                 }
             })
         },
@@ -80,6 +87,14 @@
             this.playEL.classList.remove(removeClass);
             this.playEL.classList.add(addClass);
             this.playing = this.songInfo.playing;
+        },
+        toggleSongList: function () {
+            if(!Popup.checkInit())return;
+            var isOpenSongList = Popup.songListEl.clientHeight == 0;
+            Popup.songListEl.style.height = isOpenSongList? Popup.SONG_LIST_HEIGHT : 0;
+            if(isOpenSongList){
+                Popup.backgroundPage.requestSongList();
+            }
         },
         checkInit: function () {
             return this.getBackgroundPage().playerInit;
@@ -134,8 +149,11 @@
             this.changePlayType();
             this.changePlayState();
         },
+        fillSongList: function () {
+            this.songListEl.innerHTML = this.backgroundPage.songList;
+        },
         fillSongName: function () {
-            this.songNameEL.innerText = this.songInfo.song_name;
+            this.songNameEL.innerHTML = this.songInfo.song_name;
             //todo 使用 this.sonNameEl 调用setAttribute会报 this.sonNameEl undefined错误
             $('.song-name').setAttribute('data-src','/song?id='+ this.songInfo.song_id);
         },
