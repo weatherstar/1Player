@@ -140,7 +140,7 @@
             this.getSongList(function (songList) {
                 self.sendMessage({
                     type: Events.RESPONSE_SONG_LIST,
-                    songList: songList
+                    songList: songList.innerHTML
                 })
             });
         },
@@ -164,7 +164,7 @@
         getSongList: function (callback) {
             callback = callback || Util.noop;
             this.showSongList(function (songList) {
-                callback(songList.querySelector('.listbdc.j-flag').innerHTML);
+                callback(songList.querySelector('.listbdc.j-flag'));
             });
         },
         showSongList: function (callback) {
@@ -258,8 +258,11 @@
             progressEL.dispatchEvent(evt);
             this.sendSongProgressMessage(true);
         },
-        selectSongInSongList: function(){
-
+        selectSongInSongList: function(id){
+            var self = this;
+            self.getSongList(function (songList) {
+                songList.querySelector('li[data-id="'+ id +'"]').click();
+            });
         }
     });
 
