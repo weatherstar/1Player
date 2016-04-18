@@ -71,6 +71,16 @@
         },
         changeSong: function () {
             this.fillPlayerDOM();
+            this.selectSongInSongList();
+        },
+        selectSongInSongList: function () {
+            var songEl = null;
+            if(this.isSongListOpen()){
+                songEl = this.songListEl.querySelector('li[data-id="' + this.songInfo.song_id +'"]');
+                if(songEl&&!songEl.classList.contains('z-sel')){
+                    songEl.click();
+                }
+            }
         },
         changeProgress: function () {
             this.fillProgressDOM();
@@ -90,9 +100,9 @@
         },
         toggleSongList: function () {
             if(!Popup.checkInit())return;
-            var isOpenSongList = Popup.songListEl.clientHeight == 0;
-            Popup.songListEl.style.height = isOpenSongList? Popup.SONG_LIST_HEIGHT : 0;
-            if(isOpenSongList){
+            var isSongListOpen = Popup.isSongListOpen();
+            Popup.songListEl.style.height = isSongListOpen? 0 : Popup.SONG_LIST_HEIGHT;
+            if(!isSongListOpen){
                 Popup.backgroundPage.requestSongList();
             }
         },
@@ -127,11 +137,21 @@
                    }
                 });
                 currentLi.classList.add('z-sel');
+                Popup.scrollToCurrentSong();
             }
             Popup.backgroundPage.clickSongListItem(currentLi.getAttribute('data-id'));
         },
+        isSongListOpen: function () {
+            return this.songListEl.clientHeight != 0;
+        },
         isInSongList: function (el) {
           return  document.getElementsByClassName('f-cb')[0] && document.getElementsByClassName('f-cb')[0].contains(el);
+        },
+        scrollToCurrentSong: function () {
+            var currentSongEl = this.songListEl.querySelector('.z-sel');
+            if(currentSongEl&&(currentSongEl.offsetTop < this.songListEl.scrollTop || currentSongEl.offsetTop >= this.songListEl.scrollTop + this.songListEl.clientHeight - currentSongEl.clientHeight)){
+                this.songListEl.scrollTop = currentSongEl.offsetTop;
+            }
         },
         fillProgressDOM: function () {
             this.fillLoaded();
@@ -151,6 +171,7 @@
         },
         fillSongList: function () {
             this.songListEl.innerHTML = this.backgroundPage.songList;
+            this.scrollToCurrentSong();
         },
         fillSongName: function () {
             this.songNameEL.innerHTML = this.songInfo.song_name;
