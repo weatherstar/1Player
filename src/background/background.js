@@ -5,7 +5,7 @@ var Background = Base.extend({
     currentPageID:'',
     currentPort: null,
     songInfo: null,
-    notificationThrottle: null,
+    notificationDebounce: null,
     notificationInterval: null,
     inputEl: document.createElement('input'),
     defaultSongInfo: {
@@ -24,7 +24,7 @@ var Background = Base.extend({
     afterInit: function () {
         document.body.appendChild(this.inputEl);
         this.songInfo = this.defaultSongInfo;
-        this.notificationThrottle =  Util.throttle(this.desktopNotify,2000);
+        this.notificationDebounce =  Util.debounce(this.desktopNotify,1000);
         this.listenContentMessage();
         this.listenCommands();
         this.listenNotification();
@@ -64,7 +64,7 @@ var Background = Base.extend({
                         if(!self.isCurrentPage(port.name))return;
                         self.songInfo = msg.songInfo;
                         self.sendMessageExtension(Events.SONG_CHANGE);
-                        self.notificationThrottle();
+                        self.notificationDebounce();
                         break;
                     case  Events.SONG_PROGRESS:
                         if(self.currentPageID != port.name){
