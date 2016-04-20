@@ -1,9 +1,12 @@
 var Background = Base.extend({
 
     playerInit: false,
+    notificationShow: false,
     currentPageID:'',
     currentPort: null,
     songInfo: null,
+    notificationThrottle: null,
+    notificationInterval: null,
     inputEl: document.createElement('input'),
     defaultSongInfo: {
         "song_id": 0,
@@ -21,8 +24,10 @@ var Background = Base.extend({
     afterInit: function () {
         document.body.appendChild(this.inputEl);
         this.songInfo = this.defaultSongInfo;
+        this.notificationThrottle =  Util.throttle(this.desktopNotify,2000);
         this.listenContentMessage();
         this.listenCommands();
+        this.listenNotification();
     },
     listenCommands: function () {
         var self = this;
@@ -59,6 +64,7 @@ var Background = Base.extend({
                         if(!self.isCurrentPage(port.name))return;
                         self.songInfo = msg.songInfo;
                         self.sendMessageExtension(Events.SONG_CHANGE);
+                        self.notificationThrottle();
                         break;
                     case  Events.SONG_PROGRESS:
                         if(self.currentPageID != port.name){
@@ -79,6 +85,7 @@ var Background = Base.extend({
                     case Events.RESPONSE_SONG_LIST:
                         self.songList = msg.songList;
                         self.sendMessageExtension(Events.RESPONSE_SONG_LIST);
+                        break;
                 }
             });
             port.onDisconnect.addListener(function (port) {
@@ -87,6 +94,13 @@ var Background = Base.extend({
                     self.sendMessage(Events.RESET_PLAYER);
                 }
             })
+        });
+    },
+
+    listenNotification: function () {
+        var self = this;
+        chrome.notifications.onClosed.addListener(function () {
+            self.notificationShow = false;
         });
     },
     isCurrentPage: function (name) {
@@ -104,6 +118,28 @@ var Background = Base.extend({
     playPrev: function () {
         this.sendMessageContent({type: Events.PREV});
     },
+    desktopNotify: function () {
+        var self = this;
+        var options = {
+            type: "basic",
+            title: self.songInfo.song_name,
+            message: self.songInfo.singer_name,
+            iconUrl: '../icon48.png'
+        };
+        clearInterval(self.notificationInterval);
+
+        self.notificationInterval = setInterval(function () {
+            if(self.songInfo.playing){
+                clearInterval(self.notificationInterval);
+                if(self.notificationShow){
+                    chrome.notifications.update(self.notificationID, options);
+                }else{
+                    chrome.notifications.create(self.notificationID = Util.now().toString(), options);
+                    self.notificationShow = true;
+                }
+            }
+        },500);
+    },
     copySongLinkToClipboard: function () {
         if(this.currentPort){
             this.inputEl.value = Config.music_163_url + '#/song?id=' + this.songInfo.song_id;
@@ -117,7 +153,7 @@ var Background = Base.extend({
             self.goPage();
             return;
         }
-        //如果当前是播放mv的界面 先跳转至各取洁面再播放
+        //如果当前是播放mv的界面 先跳转至歌曲界面再播放
         if(!self.songInfo.isPlaying){
             self.isMVPage(function (mvPage) {
                 mvPage && self.goPage('/song?id='+ self.songInfo.song_id);

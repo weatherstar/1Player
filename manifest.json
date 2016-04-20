@@ -28,7 +28,11 @@
   "permissions": [
     "tabs",
     "activeTab",
-    "clipboardWrite"
+    "clipboardWrite",
+    "notifications"
+  ],
+  "web_accessible_resources": [
+    "icon48.png"
   ],
   "commands": {
     "copy-song": {
