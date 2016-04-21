@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>one-player</title>
+    <link rel="stylesheet" href="./css/options.css"/>
+</head>
+<body>
+<div class="one-player-options">
+    <div class="options-box">
+        <h3 class="options-title">
+            桌面通知停留时间：
+        </h3>
+        <div class="options-content">
+            <div class="radio-item">
+                <input id="notification-1" type="radio" name="notification" value="0"/>
+                <label  for="notification-1">不显示桌面通知</label>
+            </div>
+            <div class="radio-item">
+                <input id="notification-2" type="radio" name="notification" value="1000"/>
+                <label  for="notification-2">停留1秒</label>
+            </div>
+            <div class="radio-item">
+                <input id="notification-3" type="radio" name="notification" value="2000"/>
+                <label  for="notification-3">停留2秒</label>
+            </div>
+            <div class="radio-item">
+                <input id="notification-4" type="radio" name="notification" value="3000"/>
+                <label  for="notification-4">停留3秒</label>
+            </div>
+            <div class="radio-item">
+                <input id="notification-5" type="radio" name="notification" value="4000"/>
+                <label  for="notification-5">停留4秒</label>
+            </div>
+            <div class="radio-item">
+                <input id="notification-6" type="radio" name="notification" value="5000"/>
+                <label  for="notification-6">停留5秒</label>
+            </div>
+        </div>
+    </div>
+
+    <button id="save-options" class="btn btn-primary">保存</button>
+
+    <p class="success-tip">保存成功</p>
+</div>
+<script src="./js/options.js"></script>
+</body>
+</html>

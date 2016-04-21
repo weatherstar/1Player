@@ -4,7 +4,10 @@
   "name": "1Player for 网易云音乐",
   "description": "使用1Player控制你的网易云音乐播放器，通过快捷键可以在做其他工作时方便地控制歌曲免除来回切换的烦恼。",
   "version": "1.0.2",
-
+  "options_ui": {
+    "page": "options.html",
+    "chrome_style": true
+  },
   "content_scripts":[
     {
       "matches": ["http://music.163.com/*"],
@@ -29,7 +32,17 @@
     "tabs",
     "activeTab",
     "clipboardWrite",
-    "notifications"
+    "notifications",
+    "storage",
+    "*://p1.music.126.net///*",
+    "*://p2.music.126.net///*",
+    "*://p3.music.126.net///*",
+    "*://p4.music.126.net///*",
+    "*://p5.music.126.net///*",
+    "*://p6.music.126.net///*",
+    "*://p7.music.126.net///*",
+    "*://p8.music.126.net///*",
+    "*://p9.music.126.net///*"
   ],
   "web_accessible_resources": [
     "icon48.png"

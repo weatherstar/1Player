@@ -7,6 +7,8 @@ var Background = Base.extend({
     songInfo: null,
     notificationDebounce: null,
     notificationInterval: null,
+    clearNotificationTimeout: null,
+    notificationTimeout: Config.default_notification_timeout,
     inputEl: document.createElement('input'),
     defaultSongInfo: {
         "song_id": 0,
@@ -28,6 +30,7 @@ var Background = Base.extend({
         this.listenContentMessage();
         this.listenCommands();
         this.listenNotification();
+        this.getOptions();
     },
     listenCommands: function () {
         var self = this;
@@ -103,6 +106,14 @@ var Background = Base.extend({
             self.notificationShow = false;
         });
     },
+    getOptions: function () {
+        var self = this;
+        chrome.storage.sync.get({
+            notificationTimeout: Config.default_notification_timeout
+        }, function(items) {
+            self.notificationTimeout = items.notificationTimeout;
+        });
+    },
     isCurrentPage: function (name) {
         return this.currentPageID == name;
     },
@@ -122,19 +133,39 @@ var Background = Base.extend({
         var self = this;
         var options = {
             type: "basic",
-            title: self.songInfo.song_name,
-            message: self.songInfo.singer_name,
+            title: Util.getElementText(self.songInfo.song_name),
+            message: Util.getElementText(self.songInfo.singer_name).substring(1),
             iconUrl: '../icon48.png'
         };
         clearInterval(self.notificationInterval);
+
+        if(self.notificationTimeout == 0)return;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", self.songInfo.song_img);
+        xhr.responseType = "blob";
+        xhr.onload = function(){
+            var blob = this.response;
+            options.iconUrl = window.URL.createObjectURL(blob);
+        };
+        xhr.send(null);
 
         self.notificationInterval = setInterval(function () {
             if(self.songInfo.playing){
                 clearInterval(self.notificationInterval);
                 if(self.notificationShow){
-                    chrome.notifications.update(self.notificationID, options);
+                    clearTimeout(self.clearNotificationTimeout);
+                    chrome.notifications.update(self.notificationID, options, function () {
+                        self.clearNotificationTimeout = setTimeout(function () {
+                            chrome.notifications.clear(self.notificationID);
+                        },self.notificationTimeout);
+                    });
                 }else{
-                    chrome.notifications.create(self.notificationID = Util.now().toString(), options);
+                    chrome.notifications.create(self.notificationID = Util.now().toString(), options, function () {
+                        self.clearNotificationTimeout = setTimeout(function () {
+                            chrome.notifications.clear(self.notificationID);
+                        },self.notificationTimeout);
+                    });
                     self.notificationShow = true;
                 }
             }

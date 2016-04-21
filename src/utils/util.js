@@ -9,6 +9,11 @@
             });
             return uuid;
         },
+        getElementText: function (text) {
+            var div = document.createElement('div');
+            div.innerHTML = text;
+            return div.innerText;
+        },
         now: Date.now || function() {
             return new Date().getTime();
         },
