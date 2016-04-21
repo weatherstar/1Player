@@ -105,6 +105,9 @@ var Background = Base.extend({
         chrome.notifications.onClosed.addListener(function () {
             self.notificationShow = false;
         });
+        chrome.notifications.onClicked.addListener(function () {
+            self.goPage('/song?id=' + self.songInfo.song_id);
+        });
     },
     getOptions: function () {
         var self = this;

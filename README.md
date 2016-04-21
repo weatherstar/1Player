@@ -7,11 +7,26 @@
 ##Introduction
 ####Screenshot
 ![image](http://7xls2e.com1.z0.glb.clouddn.com/1player_1.png)
+#### 桌面通知
+
+![image](http://7xls2e.com1.z0.glb.clouddn.com/1player_3.png)
+
+#### 设置桌面通知停留时间
+
+![image](http://7xls2e.com1.z0.glb.clouddn.com/1player_4.png)
+
 ####自定义快捷键
+
 ![image](http://7xls2e.com1.z0.glb.clouddn.com/1player_2.png)
 
 ##Version
+#### 1.0.3
+
+- 增加播放列表
+- 增加歌曲桌面通知，可在插件选项中设置通知停留时间
+
 ####1.0.2
+
 -   修改了一些bug
 
 ####1.0.1
