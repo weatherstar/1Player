@@ -138,8 +138,10 @@
                 });
                 currentLi.classList.add('z-sel');
                 Popup.scrollToCurrentSong();
+                Popup.backgroundPage.clickSongListItem(currentLi.getAttribute('data-id'));
+            }else if(target.classList.contains('f-tdu')){
+                Popup.backgroundPage.goPage(target.getAttribute('href'));
             }
-            Popup.backgroundPage.clickSongListItem(currentLi.getAttribute('data-id'));
         },
         isSongListOpen: function () {
             return this.songListEl.clientHeight != 0;
