@@ -6,7 +6,7 @@
 ####[下载地址](https://chrome.google.com/webstore/detail/1player/bbleianliopbinjkpnmnhikiplblaifl?hl=zh-CN)
 ##Introduction
 ####Screenshot
-![image](http://7xls2e.com1.z0.glb.clouddn.com/1player_1.png)
+![image](http://7xls2e.com1.z0.glb.clouddn.com/1player_5.png)
 #### 桌面通知
 
 ![image](http://7xls2e.com1.z0.glb.clouddn.com/1player_3.png)
