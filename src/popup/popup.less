@@ -1,6 +1,8 @@
 //attributes
-@playPicWidth: 100px;
-@playHeight: 100px;
+@playPicWidth: 130px;
+@playHeight: 130px;
+@baseBgColor: #F15648;
+@baseTextColor: rgb(220,0,0);
 
 *{margin: 0; padding: 0;}
 
@@ -12,6 +14,10 @@
   font-size: 12px;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
 
+  .control-item{
+    display: inline-block;
+    vertical-align: middle;
+  }
   .clickable{
     cursor: pointer;
     &:hover{
@@ -32,17 +38,78 @@
   }
   .one-player-info{
     margin-left: @playPicWidth;
-    padding: 14px 7px 0 10px;
+    padding: 0 10px;
     height: 86px;
+    .one-player-play-bar{
+      overflow: hidden;
+      text-align: right;
+      .play{
+        &:hover{
+          &:before{
+            background-color: @baseTextColor;
+          }
+        }
+        &:before{
+          color: #fff;
+          background-color: @baseBgColor;
+          width: 18px;
+          line-height: 18px;
+          height: 18px;
+        }
+      }
+    }
     .one-player-name{
       overflow: hidden;
       white-space: nowrap;
 
-      .music-name{
-        font-size: 14px;
+      .song-name{
+        display: inline-block;
+        margin: 10px 0 3px;
+        color: @baseTextColor;
+        font-size: 13px;
       }
       .singer-name{
-        color: #666;
+        font-size: 20px;
+      }
+    }
+    .progress{
+      position: relative;
+      height: 2px;
+      width: 100%;
+      background: #cdcdcd;
+      cursor: pointer!important;
+      .progress-loaded{
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        background: #aaa;
+        width: 0;
+      }
+      .progress-played{
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 0;
+        background: @baseBgColor;
+      }
+    }
+    .one-player-control-panel-sub{
+      overflow: hidden;
+      .play-time-bar{
+        margin-top: 4px;
+        font-size: 12px;
+        color: #999;
+        span{
+          transform: scale(0.9);
+          display: inline-block;
+          margin-left: -6px;
+        }
+      }
+      .other-control{
+        margin-top: 4px;
+        float: right;
       }
     }
     .one-player-control-panel-main{
@@ -63,78 +130,8 @@
         }
       }
     }
-    .one-player-control-panel-other{
-      position: relative;
-      .progress-wrap{
-        margin: 0 128px 0 5px;
-        .progress{
-          position: relative;
-          height: 6px;
-          width: 100%;
-          background: #cdcdcd;
-          cursor: pointer!important;
-          .progress-loaded{
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            background: #aaa;
-            width: 0;
-          }
-          .progress-played{
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 0;
-            background: #ff4500;
-            .progress-thumb{
-              position: absolute;
-              top: -4px;
-              right: -4px;
-              width: 12px;
-              height: 12px;
-              border-radius: 50%;
-              background: #fff;
-              border: 1px solid #ff4500;
-            }
-          }
-        }
-      }
-      .other-control{
-        .control-item{
-          color: #999;
-          display: inline-block;
-          vertical-align: -webkit-baseline-middle;
-        }
-        position: absolute;
-        right: 0;
-        bottom: -3px;
-        height: 17px;
-        font-size: 11px;
-        .play-time{
-          margin-right: 4px;
-        }
-        .play-volume{
-          position: relative;
-          display: inline-block;
-          margin-left: 7px;
-          cursor: pointer!important;
-          i{
-            font-size: 15px;
-            cursor: pointer;
-            transition: all .2s ease;
-          }
-        }
-        .play-type{
-          font-size: 15px;
-          width: 22px;
-        }
-      }
-    }
   }
   .one-player-song-list{
-    border-top: 1px solid #ddd;
     height: 0;
     max-height: 300px;
     overflow: auto;

@@ -10,36 +10,22 @@
 <body>
     <div class="one-player">
         <div class="song-pic clickable">
-            <img src="./imgs/default_music_pic_163.jpeg"/>
+            <img src="./imgs/default_music_pic_163.jpg"/>
         </div>
         <div class="one-player-info">
+            <div class="one-player-play-bar">
+                <span class="play icon-play"></span>
+            </div>
             <div class="one-player-name">
-                <span class="song-name clickable"></span>
-                <span class="singer-name clickable"></span>
+                <h2 class="singer-name clickable">周杰伦</h2>
+                <span class="song-name clickable">一路向北</span>
             </div>
-            <div class="one-player-control-panel-main">
-                <div class="list-control">
-                    <span class="play-prev icon-rewind"></span>
-
-                    <span class="play icon-play"></span>
-
-                    <span class="play-next icon-fast-forward"></span>
-
-                </div>
+            <div class="progress">
+                <div class="progress-loaded" style="width: 60%"></div>
+                <div class="progress-played" style="width: 80%"></div>
             </div>
-            <div class="one-player-control-panel-other">
-                <div class="progress-wrap ">
-                    <div class="progress">
-                        <div class="progress-loaded"></div>
-                        <div class="progress-played">
-                            <span class="progress-thumb"></span>
-                        </div>
-                    </div>
-                </div>
+            <div class="one-player-control-panel-sub">
                 <div class="other-control">
-                    <div class="control-item">
-                        - <span class="play-time"></span>
-                    </div>
                     <div class="play-type control-item">
                         <i class="icon-loop"></i>
                     </div>
@@ -47,7 +33,19 @@
                         <i class="icon-bars"></i>
                     </div>
                 </div>
+                <div class="play-time-bar">
+                    <p>- <span class="play-time">03:22 / 04:33</span></p>
+                </div>
             </div>
+            <div class="one-player-control-panel-main">
+                <div class="list-control">
+                    <span class="play-prev icon-rewind"></span>
+
+                    <span class="play-next icon-fast-forward"></span>
+
+                </div>
+            </div>
+
         </div>
         <div class="one-player-song-list">
             <div id="loading-song-list" class="loading">加载中...</div>
