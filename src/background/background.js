@@ -20,7 +20,8 @@ var Background = Base.extend({
         "played": 0,
         "time": "00:00 / 00:00",
         "playing": false,
-        "play_type": 'loop'
+        "play_type": 'loop',
+        "volume": 0
     },
 
     afterInit: function () {
@@ -205,6 +206,9 @@ var Background = Base.extend({
                 }
             });
         });
+    },
+    changeVolume: function (percent) {
+        this.sendMessageContent({type: Events.VOLUME_CHANGE, percent: percent});
     },
     changeTime: function(percent){
         this.sendMessageContent({type: Events.TIME_CHANGE, percent: percent});

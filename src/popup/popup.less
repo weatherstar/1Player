@@ -124,7 +124,32 @@
             transform: rotate(-90deg);
           }
         }
+        .icon-replay{
+          i:before{
+            font-size: 14px;
+          }
+        }
         .play-volume{
+          &:hover{
+            .volume-bar{
+              width: 50px;
+            }
+          }
+          .volume-bar{
+            display: inline-block;
+            vertical-align: 5px;
+            width: 0;
+            height: 3px;
+            background: #cdcdcd;
+            transition: width .2s ease;
+            &:hover{
+              cursor: pointer;
+            }
+          }
+          .current-volume{
+            height: 3px;
+            background: @baseBgColor;
+          }
           i:before{
             font-size: 20px;
           }
