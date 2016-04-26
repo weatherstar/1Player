@@ -12,10 +12,10 @@ var Background = Base.extend({
     inputEl: document.createElement('input'),
     defaultSongInfo: {
         "song_id": 0,
-        "song_img": "./imgs/default_music_pic_163.jpeg",
+        "song_img": "./imgs/default_music_pic_163.jpg",
         "song_name": "打开网易云音乐",
         "singer_id": 0,
-        "singer_name": "",
+        "singer_name": "网易云音乐",
         "loaded": 0,
         "played": 0,
         "time": "00:00 / 00:00",
@@ -137,7 +137,7 @@ var Background = Base.extend({
         var options = {
             type: "basic",
             title: Util.getElementText(self.songInfo.song_name),
-            message: Util.getElementText(self.songInfo.singer_name).substring(1),
+            message: Util.getElementText(self.songInfo.singer_name),
             iconUrl: '../icon48.png'
         };
         clearInterval(self.notificationInterval);

@@ -193,7 +193,7 @@
                 "song_img": self.getSongImage(),
                 "song_name": self.getSongName(),
                 "singer_id": singerInfo.id,
-                "singer_name": '-'+ singerInfo.name,
+                "singer_name": singerInfo.name,
                 "loaded": self.getSongLoaded(),
                 "played": self.getSongPlayed(),
                 "time": self.getSongTime(),
@@ -219,7 +219,7 @@
             return $(this.MUSIC_163_PLAYER_ID + ' .rdy').style.width;
         },
         getSongImage: function () {
-            return $(this.MUSIC_163_PLAYER_ID + ' .head img').src.replace(/34y34/gi,'130y130');
+            return $(this.MUSIC_163_PLAYER_ID + ' .head img').src.replace(/34y34/gi,'180y180');
         },
         getSongTime: function () {
             return $(this.MUSIC_163_PLAYER_ID + ' .time').innerHTML.replace(/<\/*em>/gi,'');

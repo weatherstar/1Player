@@ -1,13 +1,13 @@
 //attributes
-@playPicWidth: 130px;
-@playHeight: 130px;
+@playPicWidth: 180px;
+@playHeight: 180px;
 @baseBgColor: #F15648;
 @baseTextColor: rgb(220,0,0);
 
 *{margin: 0; padding: 0;}
 
 .one-player{
-  width: 414px;
+  width: 480px;
   overflow: hidden;
   user-select: none;
   font-family: Arial,Helvetica,sans-serif;
@@ -20,11 +20,7 @@
   }
   .clickable{
     cursor: pointer;
-    &:hover{
-      text-decoration: underline;
-    }
   }
-
 
   .song-pic{
     float: left;
@@ -39,7 +35,7 @@
   .one-player-info{
     margin-left: @playPicWidth;
     padding: 0 10px;
-    height: 86px;
+    height: 180px;
     .one-player-play-bar{
       overflow: hidden;
       text-align: right;
@@ -51,10 +47,11 @@
         }
         &:before{
           color: #fff;
+          font-size: 16px;
           background-color: @baseBgColor;
-          width: 18px;
-          line-height: 18px;
-          height: 18px;
+          width: 22px;
+          line-height: 22px;
+          height: 22px;
         }
       }
     }
@@ -110,24 +107,62 @@
       .other-control{
         margin-top: 4px;
         float: right;
+        .control-item{
+          &:hover{
+            i:before{
+              color: #333;
+            }
+          }
+          i:before{
+            font-size: 18px;
+            font-weight: bold;
+            color: #999;
+          }
+        }
+        .play-type{
+          i:before{
+            transform: rotate(-90deg);
+          }
+        }
+        .play-volume{
+          i:before{
+            font-size: 20px;
+          }
+        }
+      }
+    }
+    .one-player-lrc{
+      position: relative;
+      height: 40px;
+      background: #fff;
+      text-align: center;
+      overflow: hidden;
+      p{
+        font-size: 12px;
+        color: #666;
+        line-height: 20px!important;
+        height: 20px!important;
+        padding: 0!important;
+        margin: 0!important;
+        -webkit-transition: all .5s ease-out;
+        transition: all .5s ease-out;
+        opacity: .4;
+        overflow: hidden;
+      }
+      .z-sel{
+        opacity: 1;
       }
     }
     .one-player-control-panel-main{
-      .list-control{
-        text-align: center;
+      text-align: right;
+      span{
+        display: inline-block;
+        vertical-align: middle;
+        font-size: 30px;
+        margin-left: 10px;
+      }
+      span.icon-like{
         font-size: 26px;
-        height: 54px;
-        line-height: 54px;
-        .clickable{
-          &:hover{
-            text-decoration: none;
-          }
-          font-size: 24px;
-        }
-        .play{
-          margin: 0 40px;
-
-        }
       }
     }
   }
@@ -143,7 +178,6 @@
       position: absolute;
       text-align: center;
       top: 50%;
-      text-align: center;
       transform: translate(0,-50%);
       font-size: 16px;
       color: #999;
@@ -151,7 +185,7 @@
       a{
         text-decoration: none;
         &:link,&:visited,&:hover,&:active{
-          color: #ff4500;
+          color: @baseTextColor;
         }
       }
     }
@@ -191,7 +225,7 @@
         }
         .col-1{
           display: none;
-          background: #ff4500;
+          background: @baseBgColor;
           width: 3px;
           height: 22px;
           position: absolute;

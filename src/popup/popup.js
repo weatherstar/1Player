@@ -3,6 +3,7 @@
         events: {
             'click .play-next': 'playNext',
             'click .play-prev': 'playPrev',
+            'click .play-replay': 'replay',
             'click .play': 'playOrPause',
             'click .progress': 'changeTime',
             'click .play-type': 'changeContentPlayType',
@@ -17,7 +18,7 @@
         songNameEL: $('.song-name'),
         songImageEl: $('.song-pic'),
         singerNameEl: $('.singer-name'),
-        playEL: $('.list-control .play'),
+        playEL: $('.one-player-play-bar .play'),
         loadedEL: $('.progress-loaded'),
         playedEL: $('.progress-played'),
         playType: $('.play-type'),
@@ -120,6 +121,9 @@
         },
         resetPlayer: function () {
           this.fillPlayerDOM();
+        },
+        replay: function () {
+            Popup.backgroundPage.changeTime(0);
         },
         changeTime: function (e) {
             Popup.backgroundPage.changeTime(e.offsetX/this.clientWidth);

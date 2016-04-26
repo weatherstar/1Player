@@ -1,30 +1,11 @@
-@charset "UTF-8";
-
 @font-face {
-  font-family: "one-play-font";
-  src:url("../fonts/one-play-font.eot");
-  src:url("../fonts/one-play-font.eot?#iefix") format("embedded-opentype"),
-  url("../fonts/one-play-font.woff") format("woff"),
-  url("../fonts/one-play-font.ttf") format("truetype"),
-  url("../fonts/one-play-font.svg#one-play-font") format("svg");
-  font-weight: normal;
-  font-style: normal;
-
+  font-family: "iconfont";
+  src: url('../fonts/one-play-font.eot?t=1461598861'); /* IE9*/
+  src: url('../fonts/one-play-font.eot?t=1461598861#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('../fonts/one-play-font.woff?t=1461598861') format('woff'), /* chrome, firefox */ url('../fonts/one-play-font.ttf?t=1461598861') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/ url('../fonts/one-play-font.svg?t=1461598861#iconfont') format('svg'); /* iOS 4.1- */
 }
 
-[data-icon]:before {
-  font-family: "one-play-font" !important;
-  content: attr(data-icon);
-  font-style: normal !important;
-  font-weight: normal !important;
-  font-variant: normal !important;
-  text-transform: none !important;
-  speak: none;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
 [class^="icon-"],[class*=" icon-"]{
+  position: relative;
   &:hover{
     &:before,&:after{
       color: #000;
@@ -33,7 +14,7 @@
 }
 [class^="icon-"]:before,
 [class*=" icon-"]:before {
-  font-family: "one-play-font" !important;
+  font-family: "iconfont" !important;
   display: inline-block;
   text-align: center;
   color: #666;
@@ -48,44 +29,27 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
-.icon-play:before {
-  content: "\61";
-}
-.icon-fast-forward:before {
-  content: "\62";
-}
-.icon-rewind:before {
-  content: "\63";
-}
-.icon-shuffle:before {
-  content: "\64";
-}
-.icon-pause:before {
-  content: "\65";
-}
-.icon-volume-off:before {
-  content: "\66";
-}
-.icon-volume-up:before {
-  content: "\67";
-}
-.icon-volume-down:before {
-  content: "\68";
-}
-.icon-bars:before {
-  content: "\69";
-}
-.icon-loop:before {
-  content: "\6a";
-}
-.icon-loop-one:before {
-  content: "\6a";
-}
+.icon-pause:before { content: "\ec79"; }
+.icon-replay:before { content: "\ecd5"; }
+.icon-play:before { content: "\ecaa"; }
+.icon-volumemute:before { content: "\ed9b"; }
+.icon-volumedown:before { content: "\ed9a"; }
+.icon-volumeup:before { content: "\ed9d"; }
+.icon-loop:before { content: "\ec31"; }
+.icon-menu:before { content: "\ec3a"; }
+.icon-shuffle:before { content: "\ed11"; }
+.icon-fast-forward:before { content: "\ed08"; }
+.icon-rewind:before { content: "\ed09"; }
+.icon-like:before { content: "\e707"; }
+.icon-lrc:before { content: "\e607"; }
+.icon-loop-one:before {  content: "\ec31";  }
 .icon-loop-one:after{
   content:'1';
   font-size: 10px;
-  color: #666;
+  transform: scale(.6);
+  color: #999;
   font-style: normal;
-  vertical-align: top;
+  position: absolute;
+  left: 5.6px;
+  top: -2.5px;
 }
