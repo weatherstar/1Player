@@ -34,6 +34,8 @@
     "clipboardWrite",
     "notifications",
     "storage",
+    "*://m1.music.126.net///*",
+    "*://m2.music.126.net///*",
     "*://p1.music.126.net///*",
     "*://p2.music.126.net///*",
     "*://p3.music.126.net///*",
@@ -45,7 +47,8 @@
     "*://p9.music.126.net///*"
   ],
   "web_accessible_resources": [
-    "icon48.png"
+    "icon48.png",
+    "js/improve.js"
   ],
   "commands": {
     "copy-song": {

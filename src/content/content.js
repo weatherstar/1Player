@@ -27,6 +27,7 @@
 
         afterInit: function () {
             var self = this;
+            self.injectSongImprove();
             self.getPageUniqueID();
             self.checkPlayerInit(function () {
                 self.playerInit = true;
@@ -37,6 +38,9 @@
             self.addGoPageElement();
             self.bindOtherEvents();
 
+        },
+        injectSongImprove: function(){
+            Util.injectScript(chrome.extension.getURL('js/improve.js'),'body');
         },
         listenMusicChange: function () {
             var self = this;

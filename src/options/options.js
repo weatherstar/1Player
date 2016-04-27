@@ -1,8 +1,10 @@
 function getStorage(){
     chrome.storage.sync.get({
-        notificationTimeout: 3000
+        notificationTimeout: 3000,
+        bitRate: 96
     }, function(items) {
         setDefaultNotificationTimeout(items.notificationTimeout);
+        setDefaultBitRate(items.bitRate);
     });
 }
 function setStorage(options){
@@ -21,18 +23,34 @@ function setDefaultNotificationTimeout(timeout){
         }
     });
 }
+function setDefaultBitRate(bitRate){
+    makeArray(document.querySelectorAll('input[name=bit-rate]')).forEach(function (radio) {
+        if(radio.value == bitRate){
+            radio.checked = true;
+        }
+    });
+}
 
 function makeArray(a){
     return Array.prototype.slice.apply(a);
 }
 
 function saveOptions(){
+    var notificationTimeout;
+    var bitRate;
     makeArray(document.querySelectorAll('input[name=notification]')).forEach(function (radio) {
         if(radio.checked){
-            setStorage({
-                notificationTimeout: radio.value
-            });
+            notificationTimeout = radio.value;
         }
+    });
+    makeArray(document.querySelectorAll('input[name=notification]')).forEach(function (radio) {
+        if(radio.checked){
+            bitRate = radio.value;
+        }
+    });
+    setStorage({
+        notificationTimeout: notificationTimeout,
+        bitRate: bitRate
     });
     chrome.extension.getBackgroundPage().Background.getOptions();
 }
