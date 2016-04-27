@@ -6,9 +6,11 @@
             'click .play-replay': 'replay',
             'click .play': 'playOrPause',
             'click .progress': 'changeTime',
+            'click .volume-bar': 'changeVolume',
             'click .play-type': 'changeContentPlayType',
             'click .play-list': 'toggleSongList',
             'click .clickable': 'goPage',
+            'click .play-volume': 'toggleVolume',
             'click .one-player-song-list': 'handleSongList'
         },
 
@@ -22,7 +24,8 @@
         loadedEL: $('.progress-loaded'),
         playedEL: $('.progress-played'),
         playType: $('.play-type'),
-        timeEL : $('.play-time'),
+        timeEL: $('.play-time'),
+        volumeEl: $('.current-volume'),
         songListEl: $('.one-player-song-list'),
         songListLoadingEl: $('#loading-song-list'),
 
@@ -86,6 +89,9 @@
         changeProgress: function () {
             this.fillProgressDOM();
         },
+        changeVolume: function (e) {
+            Popup.backgroundPage.changeVolume(e.offsetX/this.clientWidth);
+        },
         changePlayType: function () {
             var icon = this.playType.querySelector('i');
             icon.className = '';
@@ -106,6 +112,9 @@
             if(!isSongListOpen){
                 Popup.backgroundPage.requestSongList();
             }
+        },
+        toggleVolume: function () {
+
         },
         checkInit: function () {
             return this.getBackgroundPage().playerInit;
@@ -163,6 +172,7 @@
             this.fillLoaded();
             this.fillPlayed();
             this.fillTime();
+            this.fillVolume();
             this.changePlayState();
         },
         fillPlayerDOM: function () {
@@ -172,6 +182,7 @@
             this.fillLoaded();
             this.fillPlayed();
             this.fillTime();
+            this.fillVolume();
             this.changePlayType();
             this.changePlayState();
         },
@@ -200,6 +211,10 @@
         },
         fillTime: function(){
             this.timeEL.innerText = this.songInfo.time;
+        },
+        fillVolume: function () {
+            console.log(this.songInfo.volume);
+            $('.current-volume').style.width = this.songInfo.volume;
         },
         playNext: function(){
             Popup.backgroundPage.playNext();

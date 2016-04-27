@@ -24,6 +24,10 @@
         },
 
         listIconEL: $('.icn.icn-list'),
+        volumeIconEl: $('.icn.icn-vol'),
+        volumeBarEl: $('.vbg.j-t'),
+        volumeEL: $('.m-vol'),
+        progressEL: $('.barbg.j-flag'),
 
         afterInit: function () {
             var self = this;
@@ -114,6 +118,9 @@
                     case Events.STATE_CHANGE:
                         self.playOrPause();
                         break;
+                    case Events.VOLUME_CHANGE:
+                        self.changeVolume(message.percent);
+                        break;
                     case Events.TIME_CHANGE:
                         self.changeTime(message.percent);
                         break;
@@ -202,7 +209,8 @@
                 "played": self.getSongPlayed(),
                 "time": self.getSongTime(),
                 "playing": self.isPlaying,
-                "play_type": self.getPlayType()
+                "play_type": self.getPlayType(),
+                "volume": self.getVolumePercent()
             }
         },
         getSingerInfo: function () {
@@ -211,6 +219,9 @@
                 id: singerEl.getAttribute('href').match(/\d+/)[0],
                 name: singerEl.innerHTML
             };
+        },
+        getVolumePercent: function () {
+            return this.volumeBarEl.querySelector('.curr').clientHeight / this.volumeBarEl.clientHeight * 100 + '%';
         },
         getPlayType: function () {
             var playTypeEL = $$(this.MUSIC_163_PLAYER_ID + ' .ctrl a')[1];
@@ -253,14 +264,30 @@
             this.clickEL.href = page;
             this.clickEL.click();
         },
+        changeVolume: function (percent) {
+            this.showVolume();
+            var volumeBarHeight = this.volumeBarEl.clientHeight;
+            var volume = this.volumeBarEl.clientHeight * percent;
+            var rect = this.volumeBarEl.getBoundingClientRect();
+            var evt = document.createEvent("MouseEvents");
+            evt.initMouseEvent("mousedown", true, true, _window, 0, 0, 0, rect.left, rect.top + volumeBarHeight - volume, false, false, false, false, 0, null);
+            this.volumeBarEl.dispatchEvent(evt);
+        },
         changeTime: function(percent){
-            var progressEL = $(this.MUSIC_163_PLAYER_ID + ' .barbg.j-flag');
-            var progress = progressEL.clientWidth * percent;
-            var rect = progressEL.getBoundingClientRect();
+            var progress = this.progressEL.clientWidth * percent;
+            var rect = this.progressEL.getBoundingClientRect();
             var evt = document.createEvent("MouseEvents");
             evt.initMouseEvent("mousedown", true, true, _window, 0, 0, 0, rect.left + progress, rect.top, false, false, false, false, 0, null);
-            progressEL.dispatchEvent(evt);
+            this.progressEL.dispatchEvent(evt);
             this.sendSongProgressMessage(true);
+        },
+        showVolume: function () {
+            if(!this.checkVolumeShow()){
+                this.volumeIconEl.click();
+            }
+        },
+        checkVolumeShow: function () {
+            return this.volumeEL.style.visibility == 'visible';
         },
         selectSongInSongList: function(id){
             var self = this;
