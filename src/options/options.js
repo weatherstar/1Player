@@ -43,7 +43,7 @@ function saveOptions(){
             notificationTimeout = radio.value;
         }
     });
-    makeArray(document.querySelectorAll('input[name=notification]')).forEach(function (radio) {
+    makeArray(document.querySelectorAll('input[name=bit-rate]')).forEach(function (radio) {
         if(radio.checked){
             bitRate = radio.value;
         }

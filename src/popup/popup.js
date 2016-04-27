@@ -10,7 +10,6 @@
             'click .play-type': 'changeContentPlayType',
             'click .play-list': 'toggleSongList',
             'click .clickable': 'goPage',
-            'click .play-volume': 'toggleVolume',
             'click .one-player-song-list': 'handleSongList'
         },
 
@@ -22,6 +21,7 @@
         singerNameEl: $('.singer-name'),
         playEL: $('.one-player-play-bar .play'),
         loadedEL: $('.progress-loaded'),
+        bitRateEl: $('#bit-rate'),
         playedEL: $('.progress-played'),
         playType: $('.play-type'),
         timeEL: $('.play-time'),
@@ -39,6 +39,7 @@
             this.backgroundPage = this.getBackgroundPage();
             this.refreshSongInfo();
             this.initPlayer();
+            this.fillBitRate();
             this.listenExtensionMessage();
         },
         initPlayer: function () {
@@ -70,6 +71,9 @@
                     case Events.RESPONSE_SONG_LIST:
                         self.fillSongList();
                         break;
+                    case Events.BIT_RATE_CHANGE:
+                        self.fillBitRate();
+                        break;
                 }
             })
         },
@@ -90,6 +94,7 @@
             this.fillProgressDOM();
         },
         changeVolume: function (e) {
+            this.querySelector('.current-volume').style.width = e.offsetX + 'px';
             Popup.backgroundPage.changeVolume(e.offsetX/this.clientWidth);
         },
         changePlayType: function () {
@@ -112,9 +117,6 @@
             if(!isSongListOpen){
                 Popup.backgroundPage.requestSongList();
             }
-        },
-        toggleVolume: function () {
-
         },
         checkInit: function () {
             return this.getBackgroundPage().playerInit;
@@ -167,6 +169,9 @@
             if(currentSongEl&&(currentSongEl.offsetTop < this.songListEl.scrollTop || currentSongEl.offsetTop >= this.songListEl.scrollTop + this.songListEl.clientHeight - currentSongEl.clientHeight)){
                 this.songListEl.scrollTop = currentSongEl.offsetTop;
             }
+        },
+        fillBitRate: function () {
+            this.bitRateEl.innerHTML = this.backgroundPage.bitRate + 'K';
         },
         fillProgressDOM: function () {
             this.fillLoaded();

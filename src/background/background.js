@@ -1,6 +1,7 @@
 var Background = Base.extend({
 
     playerInit: false,
+    bitRate: 0,
     notificationShow: false,
     currentPageID:'',
     currentPort: null,
@@ -113,9 +114,12 @@ var Background = Base.extend({
     getOptions: function () {
         var self = this;
         chrome.storage.sync.get({
-            notificationTimeout: Config.default_notification_timeout
+            notificationTimeout: Config.default_notification_timeout,
+            bitRate: Config.default_bit_rate
         }, function(items) {
             self.notificationTimeout = items.notificationTimeout;
+            self.bitRate = items.bitRate;
+            self.sendMessageExtension(Events.BIT_RATE_CHANGE);
         });
     },
     isCurrentPage: function (name) {

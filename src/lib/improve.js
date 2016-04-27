@@ -255,6 +255,7 @@
         this.originalXMLHttpRequest = _this;
     };
 // 旧版 API 大部分曲目失效，故 hook 加密函数以获取新版 API 的高音质版本
+    var bit_rate;
     var original_asrsea;
     var fake_asrsea = function(){
         //console.log(arguments)
@@ -268,7 +269,6 @@
     };
     if (window.asrsea) {
         original_asrsea = window.asrsea;
-        window.asrsea = fake_asrsea;
     }
     else {
         Object.defineProperty(window, 'asrsea', {
@@ -281,4 +281,12 @@
             }
         });
     }
+    document.querySelector('#bit-rate').addEventListener('click', function (e) {
+        var bitRate = this.getAttribute('data-bit');
+        if(bitRate == 96){
+            window.asrsea = original_asrsea;
+        }else if(bitRate == 320){
+            window.asrsea = fake_asrsea;
+        }
+    });
 })(window);

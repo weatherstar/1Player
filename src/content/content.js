@@ -9,6 +9,7 @@
 
 
         playerInit: false,
+        bitRate: 0,
         isPlaying: '',
         clickEL: null,
         currentSongID: '',
@@ -31,6 +32,7 @@
 
         afterInit: function () {
             var self = this;
+            self.addBitRateDataElement();
             self.injectSongImprove();
             self.getPageUniqueID();
             self.checkPlayerInit(function () {
@@ -43,6 +45,12 @@
             self.bindOtherEvents();
 
         },
+        addBitRateDataElement: function () {
+            var el = document.createElement('a');
+            el.id = 'bit-rate';
+            el.href = 'javascript:;';
+            document.body.appendChild(el);
+        },
         injectSongImprove: function(){
             Util.injectScript(chrome.extension.getURL('js/improve.js'),'body');
         },
@@ -52,12 +60,26 @@
             setInterval(function () {
                 self.refreshPlayState();
                 self.sendSongProgressMessage();
+                self.checkBitRateChange();
                 songID = self.getSongID();
                 if(songID != self.currentSongID){
                     self.currentSongID = songID;
                     self.sendSongChangeMessage();
                 }
             }, self.CHECK_MUSIC_CHANGE_DELAY);
+        },
+        checkBitRateChange: function () {
+            var self = this;
+            var bitRateEl = document.querySelector('#bit-rate');
+            chrome.storage.sync.get({
+                bitRate: 96
+            }, function(items) {
+                if(items.bitRate != self.bitRate){
+                    self.bitRate = items.bitRate;
+                    bitRateEl.setAttribute('data-bit',self.bitRate);
+                    bitRateEl.click();
+                }
+            });
         },
         sendSongProgressMessage: function (force) {
             var self = this;
@@ -265,6 +287,7 @@
             this.clickEL.click();
         },
         changeVolume: function (percent) {
+            var self = this;
             this.showVolume();
             var volumeBarHeight = this.volumeBarEl.clientHeight;
             var volume = this.volumeBarEl.clientHeight * percent;
@@ -272,6 +295,9 @@
             var evt = document.createEvent("MouseEvents");
             evt.initMouseEvent("mousedown", true, true, _window, 0, 0, 0, rect.left, rect.top + volumeBarHeight - volume, false, false, false, false, 0, null);
             this.volumeBarEl.dispatchEvent(evt);
+            setTimeout(function () {
+                self.volumeIconEl.click();
+            },100);
         },
         changeTime: function(percent){
             var progress = this.progressEL.clientWidth * percent;
