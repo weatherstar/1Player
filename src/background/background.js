@@ -91,6 +91,10 @@ var Background = Base.extend({
                         self.songList = msg.songList;
                         self.sendMessageExtension(Events.RESPONSE_SONG_LIST);
                         break;
+                    case Events.RESPONSE_SONG_LRC:
+                        self.songLrc = msg.songLrc;
+                        self.sendMessageExtension(Events.RESPONSE_SONG_LRC);
+                        break;
                 }
             });
             port.onDisconnect.addListener(function (port) {
@@ -210,6 +214,9 @@ var Background = Base.extend({
                 }
             });
         });
+    },
+    getSongLrc: function () {
+        this.sendMessageContent({type: Events.REQUEST_SONG_LRC});
     },
     changeVolume: function (percent) {
         this.sendMessageContent({type: Events.VOLUME_CHANGE, percent: percent});

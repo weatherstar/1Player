@@ -27,6 +27,7 @@
         timeEL: $('.play-time'),
         volumeEl: $('.current-volume'),
         songListEl: $('.one-player-song-list'),
+        songLrcEl: $('.one-player-lrc'),
         songListLoadingEl: $('#loading-song-list'),
 
         playerInit: false,
@@ -40,6 +41,7 @@
             this.refreshSongInfo();
             this.initPlayer();
             this.fillBitRate();
+            this.getSongLrc();
             this.listenExtensionMessage();
         },
         initPlayer: function () {
@@ -52,12 +54,14 @@
                 switch(msg){
                     case Events.INIT_PLAYER:
                         self.initPlayer();
+                        self.getSongLrc();
                         break;
                     case  Events.SONG_CHANGE:
                         self.changeSong();
                         break;
                     case  Events.SONG_PROGRESS:
                         self.changeProgress();
+                        self.changeLrcPosition();
                         break;
                     case  Events.SONG_PAUSE:
                         self.changePlayState();
@@ -74,12 +78,19 @@
                     case Events.BIT_RATE_CHANGE:
                         self.fillBitRate();
                         break;
+                    case Events.RESPONSE_SONG_LRC:
+                        self.fillSongLrc();
+                        break;
                 }
             })
         },
         changeSong: function () {
             this.fillPlayerDOM();
             this.selectSongInSongList();
+            this.getSongLrc();
+        },
+        getSongLrc: function () {
+            this.backgroundPage.getSongLrc();
         },
         selectSongInSongList: function () {
             var songEl = null;
@@ -88,6 +99,13 @@
                 if(songEl&&!songEl.classList.contains('z-sel')){
                     songEl.click();
                 }
+            }
+        },
+        changeLrcPosition: function () {
+            var seconds = this.getProgressInSeconds();
+            var lrcItem = this.songLrcEl.querySelector('[data-time^="' + seconds +'"]');
+            if(lrcItem){
+                this.songLrcEl.style.transform = 'translate(0,-' + lrcItem.style.offsetY + 'px)'
             }
         },
         changeProgress: function () {
@@ -117,6 +135,12 @@
             if(!isSongListOpen){
                 Popup.backgroundPage.requestSongList();
             }
+        },
+        getProgressInSeconds: function(){
+            var time = this.backgroundPage.songInfo.time.split('/')[0].split(':');
+            var minutes = parseInt(time[0]);
+            var seconds = parseInt(time[1]);
+            return minutes * 60 + seconds;
         },
         checkInit: function () {
             return this.getBackgroundPage().playerInit;
@@ -194,6 +218,9 @@
         fillSongList: function () {
             this.songListEl.innerHTML = this.backgroundPage.songList;
             this.scrollToCurrentSong();
+        },
+        fillSongLrc: function () {
+            this.songLrcEl.innerHTML = this.backgroundPage.songLrc;
         },
         fillSongName: function () {
             this.songNameEL.innerHTML = this.songInfo.song_name;

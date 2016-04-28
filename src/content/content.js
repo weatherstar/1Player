@@ -157,6 +157,10 @@
                         break;
                     case Events.REQUEST_SONG_LIST:
                         self.sendSongList();
+                        break;
+                    case Events.REQUEST_SONG_LRC:
+                        self.sendSongLrc();
+                        break;
                 }
             })
         },
@@ -174,6 +178,21 @@
                 self.sendMessage({
                     type: Events.RESPONSE_SONG_LIST,
                     songList: songList.innerHTML
+                })
+            });
+        },
+        sendSongLrc: function () {
+            var self = this;
+            this.getSongLrc(function (lrc) {
+                Util.observeDOM(document.querySelector('.listlyric.j-flag'), function () {
+                    self.sendMessage({
+                        type: Events.RESPONSE_SONG_LRC,
+                        songLrc: lrc.innerHTML
+                    })
+                });
+                self.sendMessage({
+                    type: Events.RESPONSE_SONG_LRC,
+                    songLrc: lrc.innerHTML
                 })
             });
         },
@@ -198,6 +217,12 @@
             callback = callback || Util.noop;
             this.showSongList(function (songList) {
                 callback(songList.querySelector('.listbdc.j-flag'));
+            });
+        },
+        getSongLrc: function (callback) {
+            callback = callback || Util.noop;
+            this.showSongList(function (songList) {
+                callback(songList.querySelector('.listlyric.j-flag'));
             });
         },
         showSongList: function (callback) {
