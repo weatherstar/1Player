@@ -28,12 +28,14 @@
         volumeEl: $('.current-volume'),
         songListEl: $('.one-player-song-list'),
         songLrcEl: $('.one-player-lrc'),
+        songLrcWrapEl: $('.one-player-lrc-wrap'),
         songListLoadingEl: $('#loading-song-list'),
 
         playerInit: false,
         currentPageID:'',
         songInfo: null,
         backgroundPage: null,
+        activeLrcEl: null,
         playing: false,
 
         afterInit: function () {
@@ -80,6 +82,7 @@
                         break;
                     case Events.RESPONSE_SONG_LRC:
                         self.fillSongLrc();
+                        self.changeLrcPosition();
                         break;
                 }
             })
@@ -103,9 +106,15 @@
         },
         changeLrcPosition: function () {
             var seconds = this.getProgressInSeconds();
-            var lrcItem = this.songLrcEl.querySelector('[data-time^="' + seconds +'"]');
+            var lrcItem = null;
+            if(this.songLrcWrapEl.querySelector('.z-sel')){
+                lrcItem = this.songLrcWrapEl.querySelector('.z-sel');
+                lrcItem.classList.remove('z-sel');
+            }else{
+                lrcItem = this.songLrcWrapEl.querySelector('[data-time^="' + seconds +'."]');
+            }
             if(lrcItem){
-                this.songLrcEl.style.transform = 'translate(0,-' + lrcItem.style.offsetY + 'px)'
+                this.songLrcWrapEl.style.transform = 'translate(0,-' + lrcItem.offsetTop + 'px)'
             }
         },
         changeProgress: function () {
@@ -220,7 +229,7 @@
             this.scrollToCurrentSong();
         },
         fillSongLrc: function () {
-            this.songLrcEl.innerHTML = this.backgroundPage.songLrc;
+            this.songLrcWrapEl.innerHTML = this.backgroundPage.songLrc;
         },
         fillSongName: function () {
             this.songNameEL.innerHTML = this.songInfo.song_name;
