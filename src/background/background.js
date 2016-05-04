@@ -243,7 +243,7 @@ var Background = Base.extend({
     },
     //向content发送消息
     sendMessageContent: function (message) {
-        this.currentPort.postMessage(message)
+        this.currentPort && this.currentPort.postMessage(message)
     },
     //在extension内部发送消息
     sendMessageExtension: function(message){
