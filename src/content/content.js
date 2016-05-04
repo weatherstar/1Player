@@ -320,9 +320,10 @@
             var evt = document.createEvent("MouseEvents");
             evt.initMouseEvent("mousedown", true, true, _window, 0, 0, 0, rect.left, rect.top + volumeBarHeight - volume, false, false, false, false, 0, null);
             this.volumeBarEl.dispatchEvent(evt);
-            setTimeout(function () {
-                self.volumeIconEl.click();
-            },100);
+            evt = document.createEvent("MouseEvents");
+            evt.initMouseEvent("mouseup", true, true, _window, 0, 0, 0, rect.left, rect.top + volumeBarHeight - volume, false, false, false, false, 0, null);
+            this.volumeBarEl.dispatchEvent(evt);
+
         },
         changeTime: function(percent){
             var progress = this.progressEL.clientWidth * percent;

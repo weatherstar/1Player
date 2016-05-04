@@ -37,6 +37,7 @@
         backgroundPage: null,
         activeLrcEl: null,
         playing: false,
+        currentLrc: null,
 
         afterInit: function () {
             this.backgroundPage = this.getBackgroundPage();
@@ -114,7 +115,12 @@
                 lrcItem = this.songLrcWrapEl.querySelector('[data-time^="' + seconds +'."]');
             }
             if(lrcItem){
-                this.songLrcWrapEl.style.transform = 'translate(0,-' + lrcItem.offsetTop + 'px)'
+                if(this.currentLrc){
+                    this.currentLrc.classList.remove('active');
+                }
+                this.songLrcWrapEl.style.transform = 'translate(0,-' + lrcItem.offsetTop + 'px)';
+                lrcItem.classList.add('active');
+                this.currentLrc = lrcItem;
             }
         },
         changeProgress: function () {
