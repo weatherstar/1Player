@@ -12,6 +12,7 @@
         bitRate: 0,
         isPlaying: '',
         clickEL: null,
+        contentFrameDocument: null,
         currentSongID: '',
         connectPort: '',
         playType: {
@@ -29,6 +30,8 @@
         volumeBarEl: $('.vbg.j-t'),
         volumeEL: $('.m-vol'),
         progressEL: $('.barbg.j-flag'),
+        likeEl: $('.icn-add.j-flag'),
+        contentFrame: $('#g_iframe'),
 
         afterInit: function () {
             var self = this;
@@ -43,7 +46,7 @@
             });
             self.addGoPageElement();
             self.bindOtherEvents();
-
+            self.contentFrameDocument = self.contentFrame.contentDocument || self.contentFrame.contentWindow.document;
         },
         addBitRateDataElement: function () {
             var el = document.createElement('a');
@@ -161,6 +164,9 @@
                     case Events.REQUEST_SONG_LRC:
                         self.sendSongLrc();
                         break;
+                    case Events.ADD_TO_LIKE:
+                        self.addToLike();
+                        break;
                 }
             })
         },
@@ -194,6 +200,38 @@
                     type: Events.RESPONSE_SONG_LRC,
                     songLrc: lrc.innerHTML
                 })
+            });
+        },
+        addToLike: function () {
+            var self = this;
+            var interval = null;
+            var likeItem = null;
+            var msgEl = null;
+            var frame = null;
+            var contentFrameDocument = null;
+            self.likeEl.click();
+            frame = $('#g_iframe');
+            contentFrameDocument = frame.contentDocument || frame.contentWindow.document;
+            interval = setInterval(function () {
+                likeItem = contentFrameDocument.querySelector('.xtag');
+                if(likeItem){
+                    likeItem.click();
+                    clearInterval(interval);
+                    msgEl = frame.querySelector('.m-sysmsg');
+                    interval = setInterval(function () {
+                        msgEl = contentFrameDocument.querySelector('.m-sysmsg');
+                        if(msgEl){
+                            self.sendAddLikeMessage(msgEl.innerText);
+                            clearInterval(msgEl);
+                        }
+                    },100);
+                }
+            },500);
+        },
+        sendAddLikeMessage: function (msg) {
+            this.sendMessage({
+                type: Events.ADD_LIKE_FINISH,
+                msg: msg
             });
         },
         sendSongChangeMessage: function () {

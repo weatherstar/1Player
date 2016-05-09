@@ -137,6 +137,7 @@
           }
         }
         .play-volume{
+          font-size: 0;
           &:hover{
             .volume-bar{
               width: 50px;
@@ -199,6 +200,11 @@
       }
       span.icon-like{
         font-size: 26px;
+      }
+      span.like{
+        &:before{
+          color: @baseBgColor;
+        }
       }
     }
   }

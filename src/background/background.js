@@ -95,6 +95,9 @@ var Background = Base.extend({
                         self.songLrc = msg.songLrc;
                         self.sendMessageExtension(Events.RESPONSE_SONG_LRC);
                         break;
+                    case Events.ADD_LIKE_FINISH:
+                        self.addLikeMsg = msg.msg;
+                        self.sendMessageExtension(Events.ADD_LIKE_FINISH);
                 }
             });
             port.onDisconnect.addListener(function (port) {
@@ -223,6 +226,9 @@ var Background = Base.extend({
     },
     changeTime: function(percent){
         this.sendMessageContent({type: Events.TIME_CHANGE, percent: percent});
+    },
+    addToLike: function(){
+        this.sendMessageContent({type: Events.ADD_TO_LIKE});
     },
     changeContentPlayType: function () {
         this.sendMessageContent({type: Events.PLAY_TYPE_CHANGE});

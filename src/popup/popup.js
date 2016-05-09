@@ -10,7 +10,8 @@
             'click .play-type': 'changeContentPlayType',
             'click .play-list': 'toggleSongList',
             'click .clickable': 'goPage',
-            'click .one-player-song-list': 'handleSongList'
+            'click .one-player-song-list': 'handleSongList',
+            'click .play-like': 'addToLike'
         },
 
         MUSIC_163_LINK: 'http://music.163.com/ ',
@@ -23,6 +24,7 @@
         loadedEL: $('.progress-loaded'),
         bitRateEl: $('#bit-rate'),
         playedEL: $('.progress-played'),
+        likeEl: $('.play-like'),
         playType: $('.play-type'),
         timeEL: $('.play-time'),
         volumeEl: $('.current-volume'),
@@ -33,6 +35,7 @@
 
         playerInit: false,
         currentPageID:'',
+        loadingLike: false,
         songInfo: null,
         backgroundPage: null,
         activeLrcEl: null,
@@ -84,6 +87,10 @@
                     case Events.RESPONSE_SONG_LRC:
                         self.fillSongLrc();
                         self.changeLrcPosition();
+                        break;
+                    case Events.ADD_LIKE_FINISH:
+                        self.loadingLike = false;
+                        self.showSongLike();
                         break;
                 }
             })
@@ -178,6 +185,11 @@
         changeTime: function (e) {
             Popup.backgroundPage.changeTime(e.offsetX/this.clientWidth);
         },
+        addToLike: function () {
+            if(this.loadingLike)return;
+            this.loadingLike = true;
+            Popup.backgroundPage.addToLike();
+        },
         handleSongList: function (e) {
             var target = e.target,
                 liArray = null,
@@ -262,6 +274,9 @@
         fillVolume: function () {
             console.log(this.songInfo.volume);
             $('.current-volume').style.width = this.songInfo.volume;
+        },
+        showSongLike: function () {
+            this.likeEl.classList.add('like');
         },
         playNext: function(){
             Popup.backgroundPage.playNext();
