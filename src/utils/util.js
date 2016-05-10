@@ -35,7 +35,7 @@
                         if( mutations[0].addedNodes.length || mutations[0].removedNodes.length )
                             callback();
                     });
-                    obs.observe( obj, { childList:true, subtree:true });
+                    obs.observe( obj, { childList:true, subtree:false });
                 }
                 else if( eventListenerSupported ){
                     obj.addEventListener('DOMNodeInserted', callback, false);

@@ -1,6 +1,9 @@
 var Background = Base.extend({
 
+    MAX_LRC_NOTIFICATION: 3,
+
     playerInit: false,
+    lrcNotificationArr: [],
     bitRate: 0,
     songNotificationShow: false,
     lrcNotificationShow: false,
@@ -119,6 +122,9 @@ var Background = Base.extend({
         var self = this;
         chrome.notifications.onClosed.addListener(function (id) {
             self[id + 'Show'] = false;
+            if(id.indexOf(self.lrcNotificationID) > -1){
+                self.lrcNotificationArr.shift();
+            }
         });
         chrome.notifications.onClicked.addListener(function () {
             self.goPage('/song?id=' + self.songInfo.song_id);
@@ -139,18 +145,9 @@ var Background = Base.extend({
         var seconds = Util.getProgressInSeconds(this.songInfo.time.split('/')[0].split(':'));
         var lrcItem = null;
         var lrc = Util.getElementWrap(this.songLrc);
-        if(lrc.querySelector('.z-sel')){
-            lrcItem = lrc.querySelector('.z-sel');
-            lrcItem.classList.remove('z-sel');
-        }else{
-            lrcItem = lrc.querySelector('[data-time^="' + seconds +'."]');
-        }
+        lrcItem = lrc.querySelector('[data-time^="' + seconds +'."]');
         if(lrcItem){
-            console.log(lrcItem.innerText);
-            console.log(this.currentLrc.innerText);
-            console.log(lrcItem.innerText!=this.currentLrc.innerText);
-            console.log('------------');
-            if(lrcItem.innerText != this.innerText && lrcItem.innerText!=''){
+            if(lrcItem.innerText != this.currentLrc.innerText && lrcItem.innerText!=''){
                 this.showLrcNotification(lrcItem.innerText);
             }
             this.currentLrc = lrcItem;
@@ -173,13 +170,21 @@ var Background = Base.extend({
     },
     showLrcNotification: function (lrc) {
         var self = this;
+        var id = '';
         var options = {
             type: "basic",
-            title: Util.getElementText(self.songInfo.song_name),
-            message: Util.getElementText(lrc),
-            iconUrl: '../icon48.png'
+            title: Util.getElementText(lrc),
+            message: '',
+            iconUrl: '../icon128_white.png'
         };
-        chrome.notifications.create(self.lrcNotificationID + new Date().getTime(), options);
+        if(self.lrcNotificationArr.length < self.MAX_LRC_NOTIFICATION){
+            id = self.lrcNotificationID + new Date().getTime();
+            chrome.notifications.create(id, options);
+            self.lrcNotificationArr.push(id);
+        }else{
+            id = self.lrcNotificationArr[self.MAX_LRC_NOTIFICATION-1];
+            chrome.notifications.update(id, options);
+        }
     },
     desktopNotify: function () {
         var self = this;
