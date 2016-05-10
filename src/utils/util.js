@@ -14,6 +14,17 @@
             div.innerHTML = text;
             return div.innerText;
         },
+        getElementWrap: function (text) {
+            var div = document.createElement('div');
+            div.innerHTML = text;
+            return div;
+        },
+        getProgressInSeconds: function(source_time){
+            var time = source_time;
+            var minutes = parseInt(time[0]);
+            var seconds = parseInt(time[1]);
+            return minutes * 60 + seconds;
+        },
         observeDOM: (function(){
             var MutationObserver = _window.MutationObserver || _window.WebKitMutationObserver,
                 eventListenerSupported = _window.addEventListener;

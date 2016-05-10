@@ -2,10 +2,14 @@ var Background = Base.extend({
 
     playerInit: false,
     bitRate: 0,
-    notificationShow: false,
+    songNotificationShow: false,
+    lrcNotificationShow: false,
+    songNotificationID: 'songNotification',
+    lrcNotificationID: 'lrcNotification',
     currentPageID:'',
     currentPort: null,
     songInfo: null,
+    currentLrc: {},
     notificationDebounce: null,
     notificationInterval: null,
     clearNotificationTimeout: null,
@@ -69,6 +73,7 @@ var Background = Base.extend({
                         if(!self.isCurrentPage(port.name))return;
                         self.songInfo = msg.songInfo;
                         self.sendMessageExtension(Events.SONG_CHANGE);
+                        self.getSongLrc();
                         self.notificationDebounce();
                         break;
                     case  Events.SONG_PROGRESS:
@@ -77,6 +82,7 @@ var Background = Base.extend({
                             self.currentPort = port;
                         }
                         self.songInfo = msg.songInfo;
+                        self.changeLrc();
                         self.sendMessageExtension(Events.SONG_PROGRESS);
                         break;
                     case  Events.SONG_PAUSE:
@@ -111,8 +117,8 @@ var Background = Base.extend({
 
     listenNotification: function () {
         var self = this;
-        chrome.notifications.onClosed.addListener(function () {
-            self.notificationShow = false;
+        chrome.notifications.onClosed.addListener(function (id) {
+            self[id + 'Show'] = false;
         });
         chrome.notifications.onClicked.addListener(function () {
             self.goPage('/song?id=' + self.songInfo.song_id);
@@ -129,6 +135,27 @@ var Background = Base.extend({
             self.sendMessageExtension(Events.BIT_RATE_CHANGE);
         });
     },
+    changeLrc: function () {
+        var seconds = Util.getProgressInSeconds(this.songInfo.time.split('/')[0].split(':'));
+        var lrcItem = null;
+        var lrc = Util.getElementWrap(this.songLrc);
+        if(lrc.querySelector('.z-sel')){
+            lrcItem = lrc.querySelector('.z-sel');
+            lrcItem.classList.remove('z-sel');
+        }else{
+            lrcItem = lrc.querySelector('[data-time^="' + seconds +'."]');
+        }
+        if(lrcItem){
+            console.log(lrcItem.innerText);
+            console.log(this.currentLrc.innerText);
+            console.log(lrcItem.innerText!=this.currentLrc.innerText);
+            console.log('------------');
+            if(lrcItem.innerText != this.innerText && lrcItem.innerText!=''){
+                this.showLrcNotification(lrcItem.innerText);
+            }
+            this.currentLrc = lrcItem;
+        }
+    },
     isCurrentPage: function (name) {
         return this.currentPageID == name;
     },
@@ -143,6 +170,16 @@ var Background = Base.extend({
     },
     playPrev: function () {
         this.sendMessageContent({type: Events.PREV});
+    },
+    showLrcNotification: function (lrc) {
+        var self = this;
+        var options = {
+            type: "basic",
+            title: Util.getElementText(self.songInfo.song_name),
+            message: Util.getElementText(lrc),
+            iconUrl: '../icon48.png'
+        };
+        chrome.notifications.create(self.lrcNotificationID + new Date().getTime(), options);
     },
     desktopNotify: function () {
         var self = this;
@@ -168,20 +205,20 @@ var Background = Base.extend({
         self.notificationInterval = setInterval(function () {
             if(self.songInfo.playing){
                 clearInterval(self.notificationInterval);
-                if(self.notificationShow){
+                if(self.songNotificationShow){
                     clearTimeout(self.clearNotificationTimeout);
-                    chrome.notifications.update(self.notificationID, options, function () {
+                    chrome.notifications.update(self.songNotificationID, options, function () {
                         self.clearNotificationTimeout = setTimeout(function () {
-                            chrome.notifications.clear(self.notificationID);
+                            chrome.notifications.clear(self.songNotificationID);
                         },self.notificationTimeout);
                     });
                 }else{
-                    chrome.notifications.create(self.notificationID = Util.now().toString(), options, function () {
+                    chrome.notifications.create(self.songNotificationID, options, function () {
                         self.clearNotificationTimeout = setTimeout(function () {
-                            chrome.notifications.clear(self.notificationID);
+                            chrome.notifications.clear(self.songNotificationID);
                         },self.notificationTimeout);
                     });
-                    self.notificationShow = true;
+                    self.songNotificationShow = true;
                 }
             }
         },500);

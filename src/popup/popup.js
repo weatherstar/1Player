@@ -47,7 +47,6 @@
             this.refreshSongInfo();
             this.initPlayer();
             this.fillBitRate();
-            this.getSongLrc();
             this.listenExtensionMessage();
         },
         initPlayer: function () {
@@ -60,7 +59,6 @@
                 switch(msg){
                     case Events.INIT_PLAYER:
                         self.initPlayer();
-                        self.getSongLrc();
                         break;
                     case  Events.SONG_CHANGE:
                         self.changeSong();
@@ -100,9 +98,6 @@
             this.selectSongInSongList();
             this.getSongLrc();
         },
-        getSongLrc: function () {
-            this.backgroundPage.getSongLrc();
-        },
         selectSongInSongList: function () {
             var songEl = null;
             if(this.isSongListOpen()){
@@ -113,7 +108,7 @@
             }
         },
         changeLrcPosition: function () {
-            var seconds = this.getProgressInSeconds();
+            var seconds = Util.getProgressInSeconds(this.backgroundPage.songInfo.time.split('/')[0].split(':'));
             var lrcItem = null;
             if(this.songLrcWrapEl.querySelector('.z-sel')){
                 lrcItem = this.songLrcWrapEl.querySelector('.z-sel');
@@ -127,6 +122,9 @@
                 }
                 this.songLrcWrapEl.style.transform = 'translate(0,-' + lrcItem.offsetTop + 'px)';
                 lrcItem.classList.add('active');
+                if(!lrcItem == this.currentLrc){
+                    this.backgroundPage.showLrcNotification(lrcItem.innerHTML);
+                }
                 this.currentLrc = lrcItem;
             }
         },
@@ -157,12 +155,6 @@
             if(!isSongListOpen){
                 Popup.backgroundPage.requestSongList();
             }
-        },
-        getProgressInSeconds: function(){
-            var time = this.backgroundPage.songInfo.time.split('/')[0].split(':');
-            var minutes = parseInt(time[0]);
-            var seconds = parseInt(time[1]);
-            return minutes * 60 + seconds;
         },
         checkInit: function () {
             return this.getBackgroundPage().playerInit;

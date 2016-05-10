@@ -199,7 +199,7 @@
                 self.sendMessage({
                     type: Events.RESPONSE_SONG_LRC,
                     songLrc: lrc.innerHTML
-                })
+                });
             });
         },
         addToLike: function () {
@@ -259,9 +259,16 @@
         },
         getSongLrc: function (callback) {
             callback = callback || Util.noop;
+            clearInterval(self.getLrcInterval);
             this.showSongList(function (songList) {
                 callback(songList.querySelector('.listlyric.j-flag'));
             });
+        },
+        hideSongList: function () {
+            var songListEl = $(this.MUSIC_163_LIST_ID);
+            if(songListEl){
+                this.listIconEL.click();
+            }
         },
         showSongList: function (callback) {
             var songListEl = $(this.MUSIC_163_LIST_ID);
@@ -276,7 +283,7 @@
                         callback(songListEl);
                         clearInterval(interval);
                     }
-                },10);
+                },100);
             }else{
                 callback(songListEl);
             }
