@@ -47,6 +47,7 @@
             this.refreshSongInfo();
             this.initPlayer();
             this.fillBitRate();
+            this.getSongLrc();
             this.listenExtensionMessage();
         },
         initPlayer: function () {
@@ -96,7 +97,6 @@
         changeSong: function () {
             this.fillPlayerDOM();
             this.selectSongInSongList();
-            this.getSongLrc();
         },
         selectSongInSongList: function () {
             var songEl = null;
@@ -106,6 +106,9 @@
                     songEl.click();
                 }
             }
+        },
+        getSongLrc: function () {
+            this.backgroundPage.getSongLrc();
         },
         changeLrcPosition: function () {
             var seconds = Util.getProgressInSeconds(this.backgroundPage.songInfo.time.split('/')[0].split(':'));

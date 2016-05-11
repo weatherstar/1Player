@@ -46,6 +46,7 @@
             });
             self.addGoPageElement();
             self.bindOtherEvents();
+            self.injectStyle();
             self.contentFrameDocument = self.contentFrame.contentDocument || self.contentFrame.contentWindow.document;
         },
         addBitRateDataElement: function () {
@@ -121,6 +122,20 @@
                     songName = self.getSongName();
                 }
             }, self.CHECK_INIT_DELAY)
+        },
+        injectStyle: function () {
+            var css = '#g_playlist { display: none; }',
+                head = document.head || document.getElementsByTagName('head')[0],
+                style = document.createElement('style');
+
+            style.type = 'text/css';
+            if (style.styleSheet){
+                style.styleSheet.cssText = css;
+            } else {
+                style.appendChild(document.createTextNode(css));
+            }
+
+            head.appendChild(style);
         },
         bindOtherEvents: function () {
             $$(this.MUSIC_163_PLAYER_ID + ' .ctrl a')[1].addEventListener('click',this.sendPlayTypeChangeMessage)

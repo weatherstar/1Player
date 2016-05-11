@@ -1,10 +1,12 @@
 var Background = Base.extend({
 
-    MAX_LRC_NOTIFICATION: 3,
+    MAX_LRC_NOTIFICATION: 2,
+    LRC_INTERVAL: 500,
 
     playerInit: false,
     lrcNotificationArr: [],
     bitRate: 0,
+    songLrc: '',
     songNotificationShow: false,
     lrcNotificationShow: false,
     songNotificationID: 'songNotification',
@@ -40,6 +42,15 @@ var Background = Base.extend({
         this.listenCommands();
         this.listenNotification();
         this.getOptions();
+        this.initLrcInterval();
+    },
+    initLrcInterval: function () {
+        var self = this;
+      setInterval(function () {
+          if(self.songInfo.playing){
+              self.changeLrc();
+          }
+      },self.LRC_INTERVAL);
     },
     listenCommands: function () {
         var self = this;
@@ -85,7 +96,6 @@ var Background = Base.extend({
                             self.currentPort = port;
                         }
                         self.songInfo = msg.songInfo;
-                        self.changeLrc();
                         self.sendMessageExtension(Events.SONG_PROGRESS);
                         break;
                     case  Events.SONG_PAUSE:
@@ -145,7 +155,8 @@ var Background = Base.extend({
         var seconds = Util.getProgressInSeconds(this.songInfo.time.split('/')[0].split(':'));
         var lrcItem = null;
         var lrc = Util.getElementWrap(this.songLrc);
-        lrcItem = lrc.querySelector('[data-time^="' + seconds +'."]');
+        lrcItem = lrc.querySelector('[data-time^="' + seconds +'."]') || lrc.querySelector('[data-time="' + seconds +'"]');
+        console.log(seconds);
         if(lrcItem){
             if(lrcItem.innerText != this.currentLrc.innerText && lrcItem.innerText!=''){
                 this.showLrcNotification(lrcItem.innerText);
@@ -175,7 +186,7 @@ var Background = Base.extend({
             type: "basic",
             title: Util.getElementText(lrc),
             message: '',
-            iconUrl: '../icon128_white.png'
+            iconUrl: '../imgs/default_music_pic_163.jpg'
         };
         if(self.lrcNotificationArr.length < self.MAX_LRC_NOTIFICATION){
             id = self.lrcNotificationID + new Date().getTime();
