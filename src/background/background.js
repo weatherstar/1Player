@@ -112,7 +112,7 @@ var Background = Base.extend({
                         self.sendMessageExtension(Events.RESPONSE_SONG_LIST);
                         break;
                     case Events.RESPONSE_SONG_LRC:
-                        self.songLrc = msg.songLrc;
+                        self.songLrc = Util.getElementWrap(msg.songLrc);
                         self.sendMessageExtension(Events.RESPONSE_SONG_LRC);
                         break;
                     case Events.ADD_LIKE_FINISH:
@@ -121,8 +121,8 @@ var Background = Base.extend({
                         break;
                     case Events.RESPONSE_SONG_TIME:
                         self.songTime = msg.time;
-                        self.changeLrc();
                         self.sendMessageExtension(Events.RESPONSE_SONG_TIME);
+                        self.changeLrc();
                         break;
                 }
             });
@@ -164,8 +164,10 @@ var Background = Base.extend({
     changeLrc: function () {
         var seconds = Util.getProgressInSeconds(this.songTime.split('/')[0].split(':'));
         var lrcItem = null;
-        var lrc = Util.getElementWrap(this.songLrc);
-        lrcItem = lrc.querySelector('[data-time^="' + seconds +'."]') || lrc.querySelector('[data-time="' + seconds +'"]');
+        lrcItem = this.songLrc.querySelector('[data-time^="' + seconds +'."]') || this.songLrc.querySelector('[data-time="' + seconds +'"]');
+        if(lrcItem.innerText == ''){
+            this.songLrc.removeChild(lrcItem);
+        }
         if(lrcItem){
             if(lrcItem.innerText != this.currentLrc.innerText && lrcItem.innerText!=''){
                 this.showLrcNotification(lrcItem.innerText);

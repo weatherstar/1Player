@@ -172,6 +172,7 @@
         },
         refreshSongInfo: function () {
             this.songInfo = this.getSongInfo();
+            this.songTime = this.getBackgroundPage().songTime;
         },
         resetPlayer: function () {
           this.fillPlayerDOM();
@@ -242,7 +243,7 @@
             this.scrollToCurrentSong();
         },
         fillSongLrc: function () {
-            this.songLrcWrapEl.innerHTML = this.backgroundPage.songLrc;
+            this.songLrcWrapEl.innerHTML = this.backgroundPage.songLrc.innerHTML;
         },
         fillSongName: function () {
             this.songNameEL.innerHTML = this.songInfo.song_name;
