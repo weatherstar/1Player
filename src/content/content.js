@@ -182,6 +182,8 @@
                     case Events.ADD_TO_LIKE:
                         self.addToLike();
                         break;
+                    case Events.GET_SONG_TIME:
+                        self.sendSongTime();
                 }
             })
         },
@@ -215,6 +217,12 @@
                     type: Events.RESPONSE_SONG_LRC,
                     songLrc: lrc.innerHTML
                 });
+            });
+        },
+        sendSongTime: function () {
+            this.sendMessage({
+                type: Events.RESPONSE_SONG_TIME,
+                time: this.getSongTime()
             });
         },
         addToLike: function () {
@@ -314,7 +322,6 @@
                 "singer_name": singerInfo.name,
                 "loaded": self.getSongLoaded(),
                 "played": self.getSongPlayed(),
-                "time": self.getSongTime(),
                 "playing": self.isPlaying,
                 "play_type": self.getPlayType(),
                 "volume": self.getVolumePercent()

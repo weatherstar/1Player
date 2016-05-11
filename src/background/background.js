@@ -6,6 +6,7 @@ var Background = Base.extend({
     playerInit: false,
     lrcNotificationArr: [],
     bitRate: 0,
+    songTime:'',
     songLrc: '',
     songNotificationShow: false,
     lrcNotificationShow: false,
@@ -13,7 +14,7 @@ var Background = Base.extend({
     lrcNotificationID: 'lrcNotification',
     currentPageID:'',
     currentPort: null,
-    songInfo: null,
+    songInfo: {},
     currentLrc: {},
     notificationDebounce: null,
     notificationInterval: null,
@@ -48,7 +49,7 @@ var Background = Base.extend({
         var self = this;
       setInterval(function () {
           if(self.songInfo.playing){
-              self.changeLrc();
+              self.getSongTime();
           }
       },self.LRC_INTERVAL);
     },
@@ -117,6 +118,12 @@ var Background = Base.extend({
                     case Events.ADD_LIKE_FINISH:
                         self.addLikeMsg = msg.msg;
                         self.sendMessageExtension(Events.ADD_LIKE_FINISH);
+                        break;
+                    case Events.RESPONSE_SONG_TIME:
+                        self.songTime = msg.time;
+                        self.changeLrc();
+                        self.sendMessageExtension(Events.RESPONSE_SONG_TIME);
+                        break;
                 }
             });
             port.onDisconnect.addListener(function (port) {
@@ -151,12 +158,14 @@ var Background = Base.extend({
             self.sendMessageExtension(Events.BIT_RATE_CHANGE);
         });
     },
+    getSongTime: function () {
+        this.sendMessageContent({type: Events.GET_SONG_TIME});
+    },
     changeLrc: function () {
-        var seconds = Util.getProgressInSeconds(this.songInfo.time.split('/')[0].split(':'));
+        var seconds = Util.getProgressInSeconds(this.songTime.split('/')[0].split(':'));
         var lrcItem = null;
         var lrc = Util.getElementWrap(this.songLrc);
         lrcItem = lrc.querySelector('[data-time^="' + seconds +'."]') || lrc.querySelector('[data-time="' + seconds +'"]');
-        console.log(seconds);
         if(lrcItem){
             if(lrcItem.innerText != this.currentLrc.innerText && lrcItem.innerText!=''){
                 this.showLrcNotification(lrcItem.innerText);

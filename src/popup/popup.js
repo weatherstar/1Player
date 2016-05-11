@@ -91,6 +91,8 @@
                         self.loadingLike = false;
                         self.showSongLike();
                         break;
+                    case Events.RESPONSE_SONG_TIME:
+                        self.fillTime();
                 }
             })
         },
@@ -111,7 +113,7 @@
             this.backgroundPage.getSongLrc();
         },
         changeLrcPosition: function () {
-            var seconds = Util.getProgressInSeconds(this.backgroundPage.songInfo.time.split('/')[0].split(':'));
+            var seconds = Util.getProgressInSeconds(this.backgroundPage.songTime.split('/')[0].split(':'));
             var lrcItem = null;
             if(this.songLrcWrapEl.querySelector('.z-sel')){
                 lrcItem = this.songLrcWrapEl.querySelector('.z-sel');
@@ -222,7 +224,6 @@
         fillProgressDOM: function () {
             this.fillLoaded();
             this.fillPlayed();
-            this.fillTime();
             this.fillVolume();
             this.changePlayState();
         },
@@ -232,7 +233,6 @@
             this.fillSingerName();
             this.fillLoaded();
             this.fillPlayed();
-            this.fillTime();
             this.fillVolume();
             this.changePlayType();
             this.changePlayState();
@@ -264,10 +264,9 @@
             this.loadedEL.style.width = this.songInfo.loaded;
         },
         fillTime: function(){
-            this.timeEL.innerText = this.songInfo.time;
+            this.timeEL.innerText = this.backgroundPage.songTime;
         },
         fillVolume: function () {
-            console.log(this.songInfo.volume);
             $('.current-volume').style.width = this.songInfo.volume;
         },
         showSongLike: function () {

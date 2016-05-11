@@ -20,6 +20,8 @@
         REQUEST_SONG_LRC:     'REQUEST_SONG_LRC',
         RESPONSE_SONG_LRC:    'RESPONSE_SONG_LRC',
         ADD_TO_LIKE:          'ADD_TO_LIKE',
-        ADD_LIKE_FINISH:      'ADD_LIKE_FINISH'
+        ADD_LIKE_FINISH:      'ADD_LIKE_FINISH',
+        GET_SONG_TIME:        'GET_SONG_TIME',
+        RESPONSE_SONG_TIME:   'RESPONSE_SONG_TIME'
     };
 })(window);
