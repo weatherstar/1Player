@@ -165,11 +165,12 @@ var Background = Base.extend({
         var seconds = Util.getProgressInSeconds(this.songTime.split('/')[0].split(':'));
         var lrcItem = null;
         lrcItem = this.songLrc.querySelector('[data-time^="' + seconds +'."]') || this.songLrc.querySelector('[data-time="' + seconds +'"]');
-        if(lrcItem.innerText == ''){
-            this.songLrc.removeChild(lrcItem);
-        }
         if(lrcItem){
-            if(lrcItem.innerText != this.currentLrc.innerText && lrcItem.innerText!=''){
+            if(lrcItem.innerText == ''){
+                this.songLrc.removeChild(lrcItem);
+                return;
+            }
+            if(lrcItem.innerText != this.currentLrc.innerText){
                 this.showLrcNotification(lrcItem.innerText);
             }
             this.currentLrc = lrcItem;
