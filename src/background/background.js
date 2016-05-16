@@ -5,7 +5,6 @@ var Background = Base.extend({
 
     playerInit: false,
     lrcNotificationArr: [],
-    bitRate: 0,
     songTime:'',
     songLrc: '',
     songNotificationShow: false,
@@ -16,10 +15,10 @@ var Background = Base.extend({
     currentPort: null,
     songInfo: {},
     currentLrc: {},
+    options: {},
     notificationDebounce: null,
     notificationInterval: null,
     clearNotificationTimeout: null,
-    notificationTimeout: Config.default_notification_timeout,
     inputEl: document.createElement('input'),
     defaultSongInfo: {
         "song_id": 0,
@@ -48,7 +47,7 @@ var Background = Base.extend({
     initLrcInterval: function () {
         var self = this;
       setInterval(function () {
-          if(self.songInfo.playing){
+          if(self.songInfo.playing && self.isShowDesktopLrc()){
               self.getSongTime();
           }
       },self.LRC_INTERVAL);
@@ -149,17 +148,17 @@ var Background = Base.extend({
     },
     getOptions: function () {
         var self = this;
-        chrome.storage.sync.get({
-            notificationTimeout: Config.default_notification_timeout,
-            bitRate: Config.default_bit_rate
-        }, function(items) {
-            self.notificationTimeout = items.notificationTimeout;
-            self.bitRate = items.bitRate;
+        chrome.storage.sync.get(Config.options, function(options) {
+            self.options = options;
+            console.log(self.options);
             self.sendMessageExtension(Events.BIT_RATE_CHANGE);
         });
     },
     getSongTime: function () {
         this.sendMessageContent({type: Events.GET_SONG_TIME});
+    },
+    isShowDesktopLrc: function () {
+        return this.options.desktopLrc === 'show';
     },
     changeLrc: function () {
         var seconds = Util.getProgressInSeconds(this.songTime.split('/')[0].split(':'));
@@ -219,7 +218,7 @@ var Background = Base.extend({
         };
         clearInterval(self.notificationInterval);
 
-        if(self.notificationTimeout == 0)return;
+        if(self.options.notificationTimeout == 0)return;
 
         var xhr = new XMLHttpRequest();
         xhr.open("GET", self.songInfo.song_img);
@@ -238,13 +237,13 @@ var Background = Base.extend({
                     chrome.notifications.update(self.songNotificationID, options, function () {
                         self.clearNotificationTimeout = setTimeout(function () {
                             chrome.notifications.clear(self.songNotificationID);
-                        },self.notificationTimeout);
+                        },self.options.notificationTimeout);
                     });
                 }else{
                     chrome.notifications.create(self.songNotificationID, options, function () {
                         self.clearNotificationTimeout = setTimeout(function () {
                             chrome.notifications.clear(self.songNotificationID);
-                        },self.notificationTimeout);
+                        },self.options.notificationTimeout);
                     });
                     self.songNotificationShow = true;
                 }

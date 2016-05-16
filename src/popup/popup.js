@@ -220,7 +220,7 @@
             }
         },
         fillBitRate: function () {
-            this.bitRateEl.innerHTML = this.backgroundPage.bitRate + 'K';
+            this.bitRateEl.innerHTML = this.backgroundPage.options.bitRate + 'K';
         },
         fillProgressDOM: function () {
             this.fillLoaded();

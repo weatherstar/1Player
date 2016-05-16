@@ -3,7 +3,10 @@
         music_163_url: 'http://music.163.com/',
         music_163_player_id: '#g_player',
         music_163_player_list_id: '#g_playlist',
-        default_notification_timeout: 3000,
-        default_bit_rate: 96
+        options:{
+            notificationTimeout: 3000,
+            bitRate: 96,
+            desktopLrc: 'show'
+        }
     };
 })(window);

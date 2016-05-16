@@ -13,30 +13,14 @@
             桌面通知停留时间：
         </h3>
         <div class="options-content">
-            <div class="radio-item">
-                <input id="notification-1" type="radio" name="notification" value="0"/>
-                <label  for="notification-1">不显示桌面通知</label>
-            </div>
-            <div class="radio-item">
-                <input id="notification-2" type="radio" name="notification" value="1000"/>
-                <label  for="notification-2">停留1秒</label>
-            </div>
-            <div class="radio-item">
-                <input id="notification-3" type="radio" name="notification" value="2000"/>
-                <label  for="notification-3">停留2秒</label>
-            </div>
-            <div class="radio-item">
-                <input id="notification-4" type="radio" name="notification" value="3000"/>
-                <label  for="notification-4">停留3秒</label>
-            </div>
-            <div class="radio-item">
-                <input id="notification-5" type="radio" name="notification" value="4000"/>
-                <label  for="notification-5">停留4秒</label>
-            </div>
-            <div class="radio-item">
-                <input id="notification-6" type="radio" name="notification" value="5000"/>
-                <label  for="notification-6">停留5秒</label>
-            </div>
+            <select id="notificationTimeout">
+                <option value="0">不显示桌面通知</option>
+                <option value="1000">停留1秒</option>
+                <option value="2000">停留2秒</option>
+                <option value="3000">停留3秒</option>
+                <option value="4000">停留4秒</option>
+                <option value="5000">停留5秒</option>
+            </select>
         </div>
     </div>
     <div class="options-box">
@@ -44,14 +28,21 @@
             码率
         </h3>
         <div class="options-content">
-            <div class="radio-item">
-                <input id="bit-rate-1" type="radio" name="bit-rate" value="96"/>
-                <label  for="bit-rate-1">96k</label>
-            </div>
-            <div class="radio-item">
-                <input id="bit-rate-2" type="radio" name="bit-rate" value="320"/>
-                <label  for="bit-rate-2">320k - maybe ˙﹏˙</label>
-            </div>
+            <select id="bitRate">
+                <option value="96">96K</option>
+                <option value="320">320k - maybe ˙﹏˙</option>
+            </select>
+        </div>
+    </div>
+    <div class="options-box">
+        <h3 class="options-title">
+            桌面歌词
+        </h3>
+        <div class="options-content">
+            <select id="desktopLrc">
+                <option value="show">显示</option>
+                <option value="hide">隐藏</option>
+            </select>
         </div>
     </div>
 

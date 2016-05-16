@@ -1,10 +1,15 @@
+
+var defaultOptions = {
+    notificationTimeout: 3000,
+    bitRate: 96,
+    desktopLrc: "show"
+};
+
 function getStorage(){
-    chrome.storage.sync.get({
-        notificationTimeout: 3000,
-        bitRate: 96
-    }, function(items) {
-        setDefaultNotificationTimeout(items.notificationTimeout);
-        setDefaultBitRate(items.bitRate);
+    chrome.storage.sync.get(defaultOptions, function(items) {
+        for(var key in items){
+            setDefault(key,items[key]);
+        }
     });
 }
 function setStorage(options){
@@ -16,42 +21,18 @@ function setStorage(options){
         },2000);
     });
 }
-function setDefaultNotificationTimeout(timeout){
-    makeArray(document.querySelectorAll('input[name=notification]')).forEach(function (radio) {
-        if(radio.value == timeout){
-            radio.checked = true;
-        }
-    });
-}
-function setDefaultBitRate(bitRate){
-    makeArray(document.querySelectorAll('input[name=bit-rate]')).forEach(function (radio) {
-        if(radio.value == bitRate){
-            radio.checked = true;
-        }
-    });
-}
 
-function makeArray(a){
-    return Array.prototype.slice.apply(a);
+function setDefault(key, value){
+    document.querySelector('#' + key).value = value;
 }
 
 function saveOptions(){
-    var notificationTimeout;
-    var bitRate;
-    makeArray(document.querySelectorAll('input[name=notification]')).forEach(function (radio) {
-        if(radio.checked){
-            notificationTimeout = radio.value;
-        }
-    });
-    makeArray(document.querySelectorAll('input[name=bit-rate]')).forEach(function (radio) {
-        if(radio.checked){
-            bitRate = radio.value;
-        }
-    });
-    setStorage({
-        notificationTimeout: notificationTimeout,
-        bitRate: bitRate
-    });
+    var options = {};
+    for(var key in defaultOptions){
+        options[key] =  document.querySelector('#' + key).value;
+
+    }
+    setStorage(options);
     chrome.extension.getBackgroundPage().Background.getOptions();
 }
 
