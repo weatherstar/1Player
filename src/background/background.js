@@ -7,6 +7,7 @@ var Background = Base.extend({
     lrcNotificationArr: [],
     songTime:'',
     songLrc: '',
+    addLikeMsg: '',
     songNotificationShow: false,
     lrcNotificationShow: false,
     songNotificationID: 'songNotification',
@@ -116,6 +117,7 @@ var Background = Base.extend({
                         break;
                     case Events.ADD_LIKE_FINISH:
                         self.addLikeMsg = msg.msg;
+                        self.showAddLikeFinishNotification();
                         self.sendMessageExtension(Events.ADD_LIKE_FINISH);
                         break;
                     case Events.RESPONSE_SONG_TIME:
@@ -150,7 +152,6 @@ var Background = Base.extend({
         var self = this;
         chrome.storage.sync.get(Config.options, function(options) {
             self.options = options;
-            console.log(self.options);
             self.sendMessageExtension(Events.BIT_RATE_CHANGE);
         });
     },
@@ -170,7 +171,7 @@ var Background = Base.extend({
                 return;
             }
             if(lrcItem.innerText != this.currentLrc.innerText){
-                this.showLrcNotification(lrcItem.innerText);
+                this.showLrcNotification(lrcItem.innerHTML);
             }
             this.currentLrc = lrcItem;
         }
@@ -190,14 +191,27 @@ var Background = Base.extend({
     playPrev: function () {
         this.sendMessageContent({type: Events.PREV});
     },
+    showAddLikeFinishNotification: function () {
+        var self = this;
+        var iconUrl = self.addLikeMsg === Config.music_163_add_like_success_msg ? '../imgs/icon-success.png' : '../imgs/icon-warning.png';
+        var options = {
+            type: "basic",
+            title: self.addLikeMsg,
+            message: '',
+            iconUrl: iconUrl
+        };
+        console.log(options);
+        self.showSongNotification(options);
+    },
     showLrcNotification: function (lrc) {
         var self = this;
         var id = '';
+        var lrcArray = lrc.toString().split('<br>');
         var options = {
             type: "basic",
-            title: Util.getElementText(lrc),
-            message: '',
-            iconUrl: '../imgs/default_music_pic_163.jpg'
+            title: lrcArray[0] || '',
+            message: lrcArray[1] || '',
+            iconUrl: '../icon128.png'
         };
         if(self.lrcNotificationArr.length < self.MAX_LRC_NOTIFICATION){
             id = self.lrcNotificationID + new Date().getTime();
@@ -214,7 +228,7 @@ var Background = Base.extend({
             type: "basic",
             title: Util.getElementText(self.songInfo.song_name),
             message: Util.getElementText(self.songInfo.singer_name),
-            iconUrl: '../icon48.png'
+            iconUrl: '../icon128.png'
         };
         clearInterval(self.notificationInterval);
 
@@ -232,23 +246,27 @@ var Background = Base.extend({
         self.notificationInterval = setInterval(function () {
             if(self.songInfo.playing){
                 clearInterval(self.notificationInterval);
-                if(self.songNotificationShow){
-                    clearTimeout(self.clearNotificationTimeout);
-                    chrome.notifications.update(self.songNotificationID, options, function () {
-                        self.clearNotificationTimeout = setTimeout(function () {
-                            chrome.notifications.clear(self.songNotificationID);
-                        },self.options.notificationTimeout);
-                    });
-                }else{
-                    chrome.notifications.create(self.songNotificationID, options, function () {
-                        self.clearNotificationTimeout = setTimeout(function () {
-                            chrome.notifications.clear(self.songNotificationID);
-                        },self.options.notificationTimeout);
-                    });
-                    self.songNotificationShow = true;
-                }
+                self.showSongNotification(options);
             }
         },500);
+    },
+    showSongNotification: function (options) {
+        var self = this;
+        if(self.songNotificationShow){
+            clearTimeout(self.clearNotificationTimeout);
+            chrome.notifications.update(self.songNotificationID, options, function () {
+                self.clearNotificationTimeout = setTimeout(function () {
+                    chrome.notifications.clear(self.songNotificationID);
+                },self.options.notificationTimeout);
+            });
+        }else{
+            chrome.notifications.create(self.songNotificationID, options, function () {
+                self.clearNotificationTimeout = setTimeout(function () {
+                    chrome.notifications.clear(self.songNotificationID);
+                },self.options.notificationTimeout);
+            });
+            self.songNotificationShow = true;
+        }
     },
     copySongLinkToClipboard: function () {
         if(this.currentPort){

@@ -32,6 +32,7 @@
         songLrcEl: $('.one-player-lrc'),
         songLrcWrapEl: $('.one-player-lrc-wrap'),
         songListLoadingEl: $('#loading-song-list'),
+        addLikeLoadingEl: $('.add-like-loading'),
 
         playerInit: false,
         currentPageID:'',
@@ -89,7 +90,8 @@
                         break;
                     case Events.ADD_LIKE_FINISH:
                         self.loadingLike = false;
-                        self.showSongLike();
+                        self.hideAddLikeLoading();
+                        //self.showSongLike();
                         break;
                     case Events.RESPONSE_SONG_TIME:
                         self.fillTime();
@@ -174,6 +176,12 @@
             this.songInfo = this.getSongInfo();
             this.songTime = this.getBackgroundPage().songTime;
         },
+        hideAddLikeLoading: function () {
+            this.addLikeLoadingEl.style.display = 'none';
+        },
+        showAddLikeLoading: function () {
+            this.addLikeLoadingEl.style.display = 'block';
+        },
         resetPlayer: function () {
           this.fillPlayerDOM();
         },
@@ -184,8 +192,9 @@
             Popup.backgroundPage.changeTime(e.offsetX/this.clientWidth);
         },
         addToLike: function () {
-            if(this.loadingLike)return;
-            this.loadingLike = true;
+            if(Popup.loadingLike)return;
+            Popup.showAddLikeLoading();
+            Popup.loadingLike = true;
             Popup.backgroundPage.addToLike();
         },
         handleSongList: function (e) {

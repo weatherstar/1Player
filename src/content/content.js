@@ -227,25 +227,27 @@
         },
         addToLike: function () {
             var self = this;
-            var interval = null;
+            var outerInterval = null;
+            var innerInterval = null;
             var likeItem = null;
+            var msg = '';
             var msgEl = null;
             var frame = null;
             var contentFrameDocument = null;
             self.likeEl.click();
             frame = $('#g_iframe');
             contentFrameDocument = frame.contentDocument || frame.contentWindow.document;
-            interval = setInterval(function () {
+            outerInterval = setInterval(function () {
                 likeItem = contentFrameDocument.querySelector('.xtag');
                 if(likeItem){
                     likeItem.click();
-                    clearInterval(interval);
-                    msgEl = frame.querySelector('.m-sysmsg');
-                    interval = setInterval(function () {
+                    clearInterval(outerInterval);
+                    innerInterval = setInterval(function () {
                         msgEl = contentFrameDocument.querySelector('.m-sysmsg');
-                        if(msgEl){
-                            self.sendAddLikeMessage(msgEl.innerText);
-                            clearInterval(msgEl);
+                        msg = msgEl && msgEl.innerText;
+                        if(msg){
+                            clearInterval(innerInterval);
+                            self.sendAddLikeMessage(msg);
                         }
                     },100);
                 }

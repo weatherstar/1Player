@@ -96,7 +96,7 @@ gulp.task('less', function () {
 });
 
 gulp.task('images', function(cb) {
-    return gulp.src([SRC_DIR + '/**/*.png',SRC_DIR  + '/**/*.jpg',SRC_DIR  + 'src/**/*.gif',SRC_DIR  + '/**/*.jpeg'])
+    return gulp.src([SRC_DIR + '/**/*.png',SRC_DIR  + '/**/*.jpg',SRC_DIR + '/**/*.gif',SRC_DIR  + '/**/*.jpeg'])
         .pipe(imageop({
             optimizationLevel: 5,
             progressive: true,
