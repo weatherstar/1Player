@@ -9,6 +9,9 @@
             });
             return uuid;
         },
+        trim: function (str) {
+            return str.replace(/(?:(?:^|\n)\s+|\s+(?:$|\n))/g,'').replace(/\s+/g,' ');
+        },
         getElementText: function (text) {
             var div = document.createElement('div');
             div.innerHTML = text;

@@ -36,7 +36,6 @@
 
         playerInit: false,
         currentPageID:'',
-        loadingLike: false,
         songInfo: null,
         backgroundPage: null,
         activeLrcEl: null,
@@ -88,13 +87,16 @@
                         self.fillSongLrc();
                         self.changeLrcPosition();
                         break;
+                    case Events.ADD_LIKE_START:
+                        self.showAddLikeLoading();
+                        break;
                     case Events.ADD_LIKE_FINISH:
-                        self.loadingLike = false;
                         self.hideAddLikeLoading();
                         //self.showSongLike();
                         break;
                     case Events.RESPONSE_SONG_TIME:
                         self.fillTime();
+                        break;
                 }
             })
         },
@@ -192,9 +194,6 @@
             Popup.backgroundPage.changeTime(e.offsetX/this.clientWidth);
         },
         addToLike: function () {
-            if(Popup.loadingLike)return;
-            Popup.showAddLikeLoading();
-            Popup.loadingLike = true;
             Popup.backgroundPage.addToLike();
         },
         handleSongList: function (e) {

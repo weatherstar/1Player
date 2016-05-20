@@ -2,14 +2,17 @@ var Background = Base.extend({
 
     MAX_LRC_NOTIFICATION: 2,
     LRC_INTERVAL: 500,
+    ADD_LIKE_MAX_TIME: 6000,
 
     playerInit: false,
     lrcNotificationArr: [],
     songTime:'',
     songLrc: '',
     addLikeMsg: '',
+    isLogin: false,
     songNotificationShow: false,
     lrcNotificationShow: false,
+    loadingLike: false,
     songNotificationID: 'songNotification',
     lrcNotificationID: 'lrcNotification',
     currentPageID:'',
@@ -68,6 +71,9 @@ var Background = Base.extend({
                     break;
                 case 'copy-song':
                     self.copySongLinkToClipboard();
+                    break;
+                case 'add-like':
+                    self.addToLike();
             }
         });
     },
@@ -82,12 +88,15 @@ var Background = Base.extend({
                         self.currentPort = port;
                         self.currentPageID = port.name;
                         self.songInfo = msg.songInfo;
+                        self.isLogin = msg.isLogin;
                         self.sendMessageExtension(Events.INIT_PLAYER);
                         break;
                     case Events.SONG_CHANGE:
                         if(!self.isCurrentPage(port.name))return;
                         self.songInfo = msg.songInfo;
+                        self.isLogin = msg.isLogin;
                         self.sendMessageExtension(Events.SONG_CHANGE);
+                        self.songLrc = '';
                         self.getSongLrc();
                         self.notificationDebounce();
                         break;
@@ -97,6 +106,7 @@ var Background = Base.extend({
                             self.currentPort = port;
                         }
                         self.songInfo = msg.songInfo;
+                        self.isLogin = msg.isLogin;
                         self.sendMessageExtension(Events.SONG_PROGRESS);
                         break;
                     case  Events.SONG_PAUSE:
@@ -117,6 +127,8 @@ var Background = Base.extend({
                         break;
                     case Events.ADD_LIKE_FINISH:
                         self.addLikeMsg = msg.msg;
+                        self.loadingLike = false;
+                        clearTimeout(self.addLikeTimeout);
                         self.showAddLikeFinishNotification();
                         self.sendMessageExtension(Events.ADD_LIKE_FINISH);
                         break;
@@ -166,7 +178,7 @@ var Background = Base.extend({
         var lrcItem = null;
         lrcItem = this.songLrc.querySelector('[data-time^="' + seconds +'."]') || this.songLrc.querySelector('[data-time="' + seconds +'"]');
         if(lrcItem){
-            if(lrcItem.innerText == ''){
+            if(Util.trim(lrcItem.innerText) === ''){
                 this.songLrc.removeChild(lrcItem);
                 return;
             }
@@ -191,6 +203,15 @@ var Background = Base.extend({
     playPrev: function () {
         this.sendMessageContent({type: Events.PREV});
     },
+    showWarningNotification: function (title,message) {
+        var options = {
+            type: "basic",
+            title: title || '',
+            message: message || '',
+            iconUrl: '../imgs/icon-warning.png'
+        };
+        this.showSongNotification(options);
+    },
     showAddLikeFinishNotification: function () {
         var self = this;
         var iconUrl = self.addLikeMsg === Config.music_163_add_like_success_msg ? '../imgs/icon-success.png' : '../imgs/icon-warning.png';
@@ -200,7 +221,6 @@ var Background = Base.extend({
             message: '',
             iconUrl: iconUrl
         };
-        console.log(options);
         self.showSongNotification(options);
     },
     showLrcNotification: function (lrc) {
@@ -310,7 +330,20 @@ var Background = Base.extend({
         this.sendMessageContent({type: Events.TIME_CHANGE, percent: percent});
     },
     addToLike: function(){
+        var self = this;
+        if(this.loadingLike)return;
+        if(!this.playerInit)return;
+        if(!this.isLogin){
+            this.showWarningNotification('请先到网页端登录');
+            return;
+        }
+        this.loadingLike = true;
+        this.sendMessageExtension(Events.ADD_LIKE_START);
         this.sendMessageContent({type: Events.ADD_TO_LIKE});
+        this.addLikeTimeout = setTimeout(function () {
+            self.loadingLike = false;
+            self.sendMessageExtension(Events.ADD_LIKE_FINISH);
+        },self.ADD_LIKE_MAX_TIME)
     },
     changeContentPlayType: function () {
         this.sendMessageContent({type: Events.PLAY_TYPE_CHANGE});

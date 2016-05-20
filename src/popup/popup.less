@@ -16,7 +16,7 @@
 
   .control-item{
     display: inline-block;
-    vertical-align: middle;
+    vertical-align: bottom;
   }
   .clickable{
     cursor: pointer;
@@ -121,19 +121,18 @@
             }
           }
           i:before{
-            font-size: 18px;
             font-weight: bold;
             color: #999;
           }
         }
         .play-type{
-          i:before{
-            transform: rotate(-90deg);
-          }
-        }
-        .icon-replay{
-          i:before{
-            font-size: 14px;
+          i{
+            &:before{
+              position: relative;
+              bottom: -1px;
+              transform: rotate(-90deg);
+              font-size: 19px;
+            }
           }
         }
         .play-volume{
@@ -161,6 +160,11 @@
           }
           i:before{
             font-size: 20px;
+          }
+        }
+        .play-replay{
+          i:before{
+            font-size: 16px;
           }
         }
       }

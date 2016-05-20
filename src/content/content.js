@@ -13,6 +13,8 @@
         isPlaying: '',
         clickEL: null,
         contentFrameDocument: null,
+        addLikeInnerInterval: null,
+        addLikeOuterInterval: null,
         currentSongID: '',
         connectPort: '',
         playType: {
@@ -90,7 +92,8 @@
             if(!self.isPlaying&&!force) return;
             self.sendMessage({
                 type: Events.SONG_PROGRESS,
-                songInfo: self.getSongInfo()
+                songInfo: self.getSongInfo(),
+                isLogin: self.getUserIsLogin()
             });
         },
         addGoPageElement: function () {
@@ -122,6 +125,9 @@
                     songName = self.getSongName();
                 }
             }, self.CHECK_INIT_DELAY)
+        },
+        getUserIsLogin: function () {
+            return $('#g-topbar .m-tophead .head') !== null;
         },
         injectStyle: function () {
             var css = '#g_playlist { display: none; }',
@@ -227,8 +233,6 @@
         },
         addToLike: function () {
             var self = this;
-            var outerInterval = null;
-            var innerInterval = null;
             var likeItem = null;
             var msg = '';
             var msgEl = null;
@@ -237,16 +241,18 @@
             self.likeEl.click();
             frame = $('#g_iframe');
             contentFrameDocument = frame.contentDocument || frame.contentWindow.document;
-            outerInterval = setInterval(function () {
+            clearInterval(self.addLikeOuterInterval);
+            clearInterval(self.addLikeInnerInterval);
+            self.addLikeOuterInterval = setInterval(function () {
                 likeItem = contentFrameDocument.querySelector('.xtag');
                 if(likeItem){
                     likeItem.click();
-                    clearInterval(outerInterval);
-                    innerInterval = setInterval(function () {
+                    clearInterval(self.addLikeOuterInterval);
+                    self.addLikeInnerInterval = setInterval(function () {
                         msgEl = contentFrameDocument.querySelector('.m-sysmsg');
                         msg = msgEl && msgEl.innerText;
                         if(msg){
-                            clearInterval(innerInterval);
+                            clearInterval(self.addLikeInnerInterval);
                             self.sendAddLikeMessage(msg);
                         }
                     },100);
@@ -263,14 +269,16 @@
             var self = this;
             self.sendMessage({
                 type: Events.SONG_CHANGE,
-                songInfo: self.getSongInfo()
+                songInfo: self.getSongInfo(),
+                isLogin: self.getUserIsLogin()
             });
         },
         sendInitMessage: function () {
             var self = this;
             self.sendMessage({
                 "type": Events.INIT_PLAYER,
-                "songInfo": self.getSongInfo()
+                "songInfo": self.getSongInfo(),
+                "isLogin": self.getUserIsLogin()
             })
         },
         sendMessage: function (message) {

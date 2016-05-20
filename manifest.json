@@ -51,13 +51,20 @@
     "js/improve.js"
   ],
   "commands": {
-    "copy-song": {
+    "add-like": {
       "suggested_key": {
         "default": "Ctrl+Shift+7"
       },
-      "description": "拷贝当前曲目至剪贴板",
+      "description": "收藏当前曲目到我喜欢的",
       "global": true
     },
+//    "copy-song": {
+//      "suggested_key": {
+//        "default": "Ctrl+Shift+7"
+//      },
+//      "description": "拷贝当前曲目到剪贴板",
+//      "global": true
+//    },
     "play-prev": {
       "suggested_key": {
         "default": "Ctrl+Shift+8"
