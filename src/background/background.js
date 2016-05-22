@@ -356,6 +356,7 @@ var Background = Base.extend({
     },
     goPage: function (page) {
         if(this.currentPort){
+            chrome.windows.update(this.currentPort.sender.tab.windowId,{focused: true});
             chrome.tabs.update(this.currentPort.sender.tab.id, {selected: true});
             this.sendMessageContent({type: Events.GO_PAGE, page: page});
         }else{
