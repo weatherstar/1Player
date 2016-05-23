@@ -51,7 +51,7 @@ var Background = Base.extend({
     initLrcInterval: function () {
         var self = this;
       setInterval(function () {
-          if(self.songInfo.playing && self.isShowDesktopLrc()){
+          if(self.songInfo.playing){
               self.getSongTime();
           }
       },self.LRC_INTERVAL);
@@ -135,7 +135,9 @@ var Background = Base.extend({
                     case Events.RESPONSE_SONG_TIME:
                         self.songTime = msg.time;
                         self.sendMessageExtension(Events.RESPONSE_SONG_TIME);
-                        self.changeLrc();
+                        if(self.isShowDesktopLrc()){
+                            self.changeLrc();
+                        }
                         break;
                 }
             });
