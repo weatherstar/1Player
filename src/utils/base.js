@@ -23,13 +23,17 @@
             var event = null;
             if(self.events){
                 for(var item in self.events){
-                    if(self.events.hasOwnProperty(item)){
-                        event = item.split(' ');
-                        elements = Array.prototype.slice.apply(document.querySelectorAll(event[1]));
-                        elements.forEach(function (element) {
-                            element.addEventListener(event[0],self[self.events[item]])
-                        })
-                    }
+                    (function (item) {
+                        if(self.events.hasOwnProperty(item)){
+                            event = item.split(' ');
+                            elements = Array.prototype.slice.apply(document.querySelectorAll(event[1]));
+                            elements.forEach(function (element) {
+                                element.addEventListener(event[0],function (e) {
+                                    self[self.events[item]].call(self,e);
+                                })
+                            })
+                        }
+                    })(item)
                 }
             }
         }

@@ -141,8 +141,8 @@
             this.fillProgressDOM();
         },
         changeVolume: function (e) {
-            this.querySelector('.current-volume').style.width = e.offsetX + 'px';
-            Popup.backgroundPage.changeVolume(e.offsetX/this.clientWidth);
+            e.currentTarget.querySelector('.current-volume').style.width = e.offsetX + 'px';
+            this.backgroundPage.changeVolume(e.offsetX/e.currentTarget.clientWidth);
         },
         changePlayType: function () {
             var icon = this.playType.querySelector('i');
@@ -158,11 +158,11 @@
             this.playing = this.songInfo.playing;
         },
         toggleSongList: function () {
-            if(!Popup.checkInit())return;
-            var isSongListOpen = Popup.isSongListOpen();
-            Popup.songListEl.style.height = isSongListOpen? 0 : Popup.SONG_LIST_HEIGHT;
+            if(!this.checkInit())return;
+            var isSongListOpen = this.isSongListOpen();
+            this.songListEl.style.height = isSongListOpen? 0 : this.SONG_LIST_HEIGHT;
             if(!isSongListOpen){
-                Popup.backgroundPage.requestSongList();
+                this.backgroundPage.requestSongList();
             }
         },
         checkInit: function () {
@@ -188,20 +188,20 @@
           this.fillPlayerDOM();
         },
         replay: function () {
-            Popup.backgroundPage.changeTime(0);
+            this.backgroundPage.changeTime(0);
         },
         changeTime: function (e) {
-            Popup.backgroundPage.changeTime(e.offsetX/this.clientWidth);
+            this.backgroundPage.changeTime(e.offsetX/e.currentTarget.clientWidth);
         },
         addToLike: function () {
-            Popup.backgroundPage.addToLike();
+            this.backgroundPage.addToLike();
         },
         handleSongList: function (e) {
             var target = e.target,
                 liArray = null,
                 currentLi = e.target.closest('li');
             e.preventDefault();
-            if(Popup.isInSongList(target)){
+            if(this.isInSongList(target)){
                 liArray = Array.prototype.slice.apply(document.getElementsByClassName('f-cb')[0].querySelectorAll('li'));
                 liArray.forEach(function (li) {
                    if(li.classList.contains('z-sel')){
@@ -209,10 +209,10 @@
                    }
                 });
                 currentLi.classList.add('z-sel');
-                Popup.scrollToCurrentSong();
-                Popup.backgroundPage.clickSongListItem(currentLi.getAttribute('data-id'));
+                this.scrollToCurrentSong();
+                this.backgroundPage.clickSongListItem(currentLi.getAttribute('data-id'));
             }else if(target.classList.contains('f-tdu')){
-                Popup.backgroundPage.goPage(target.getAttribute('href'));
+                this.backgroundPage.goPage(target.getAttribute('href'));
             }
         },
         isSongListOpen: function () {
@@ -282,19 +282,19 @@
             this.likeEl.classList.add('like');
         },
         playNext: function(){
-            Popup.backgroundPage.playNext();
+            this.backgroundPage.playNext();
         },
         playPrev: function(){
-            Popup.backgroundPage.playPrev();
+            this.backgroundPage.playPrev();
         },
         playOrPause: function(){
-            Popup.backgroundPage.playOrPause();
+            this.backgroundPage.playOrPause();
         },
         changeContentPlayType: function(){
-            Popup.backgroundPage.changeContentPlayType();
+            this.backgroundPage.changeContentPlayType();
         },
-        goPage: function(){
-            Popup.backgroundPage.goPage(this.getAttribute('data-src'));
+        goPage: function(e){
+            this.backgroundPage.goPage(e.currentTarget.getAttribute('data-src'));
         }
     });
     Popup.init();

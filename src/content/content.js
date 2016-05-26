@@ -48,7 +48,7 @@
             });
             self.addGoPageElement();
             self.bindOtherEvents();
-            self.injectStyle();
+            // self.injectStyle();
             self.contentFrameDocument = self.contentFrame.contentDocument || self.contentFrame.contentWindow.document;
         },
         addBitRateDataElement: function () {
@@ -109,9 +109,9 @@
             this.isPlaying = state;
         },
         changePlayState: function (e) {
-            if(this.getAttribute('data-action') == 'pause'){
-                Content.isPlaying = false;
-                Content.sendMessage({type: Events.SONG_PAUSE})
+            if(e.currentTarget.getAttribute('data-action') == 'pause'){
+                this.isPlaying = false;
+                this.sendMessage({type: Events.SONG_PAUSE})
             }
         },
         checkPlayerInit: function (callback) {
@@ -194,10 +194,11 @@
             })
         },
         sendPlayTypeChangeMessage: function () {
+            var self = this;
             setTimeout(function () {
-                Content.sendMessage({
+                self.sendMessage({
                     type: Events.PLAY_TYPE_CHANGE,
-                    playType: Content.getPlayType()
+                    playType: self.getPlayType()
                 });
             },0);
         },
