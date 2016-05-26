@@ -3,7 +3,7 @@
 
   "name": "1Player for 网易云音乐",
   "description": "使用1Player控制你的网易云音乐播放器，通过快捷键可以在做其他工作时方便地控制歌曲免除来回切换的烦恼。",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "options_ui": {
     "page": "options.html",
     "chrome_style": true
