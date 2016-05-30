@@ -144,7 +144,10 @@
             head.appendChild(style);
         },
         bindOtherEvents: function () {
-            $$(this.MUSIC_163_PLAYER_ID + ' .ctrl a')[1].addEventListener('click',this.sendPlayTypeChangeMessage)
+            var self = this;
+            $$(this.MUSIC_163_PLAYER_ID + ' .ctrl a')[1].addEventListener('click',function () {
+                self.sendPlayTypeChangeMessage.call(self);
+            })
         },
         connectWithExtension: function () {
             var self = this;

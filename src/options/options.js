@@ -15,6 +15,7 @@ function getStorage(){
 function setStorage(options){
     chrome.storage.sync.set(options, function() {
         var successTip = document.querySelector('.success-tip');
+        successTip.innerText = '保存成功';
         successTip.style.display = 'block';
         setTimeout(function () {
             successTip.style.display = 'none';
