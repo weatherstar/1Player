@@ -264,7 +264,9 @@
         },
         fillSingerName: function () {
             this.singerNameEl.innerHTML = this.songInfo.singer_name;
-            $('.singer-name').setAttribute('data-src','/artist?id='+ this.songInfo.singer_id);
+            if(this.songInfo.singer_id > 0){
+                $('.singer-name').setAttribute('data-src','/artist?id='+ this.songInfo.singer_id);
+            }
         },
         fillPlayed: function () {
             this.playedEL.style.width = this.songInfo.played;

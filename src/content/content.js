@@ -343,10 +343,18 @@
         },
         getSingerInfo: function () {
             var singerEl = $(this.MUSIC_163_PLAYER_ID + ' .by a');
-            return {
-                id: singerEl.getAttribute('href').match(/\d+/)[0],
-                name: singerEl.innerHTML
-            };
+            if(singerEl){
+                return {
+                    id: singerEl.getAttribute('href').match(/\d+/)[0],
+                    name: singerEl.innerHTML
+                };   
+            }else {
+                singerEl = $(this.MUSIC_163_PLAYER_ID + ' .by span');
+                return {
+                    id: 0,
+                    name: singerEl.innerHTML
+                };
+            }
         },
         getVolumePercent: function () {
             return this.volumeBarEl.querySelector('.curr').clientHeight / this.volumeBarEl.clientHeight * 100 + '%';
