@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>one-player</title>
+
+    <!-- build:css css/style.css -->
+    <link rel="stylesheet" href="../../node_modules/weatherstar-switch/dist/switch.css">
+    <!-- endbuild -->
+
     <link rel="stylesheet" href="./css/popup.css"/>
     <link rel="stylesheet" href="./css/font.css"/>
 </head>
@@ -38,6 +43,7 @@
                     <div class="play-type control-item">
                         <i class="icon-loop-one"></i>
                     </div>
+                    <input id="lrc-check" type="checkbox" />
                 </div>
                 <div class="play-time-bar">
                     <p>- <span class="play-time"></span></p>
@@ -60,6 +66,10 @@
             <div id="loading-song-list" class="loading">加载中...</div>
         </div>
     </div>
+    <!-- build:js js/lib.js -->
+    <script src="../../node_modules/weatherstar-switch/dist/switch.js"></script>
+    <!-- endbuild -->
+
     <script src="./js/util.js"></script>
     <script src="./js/popup.js"></script>
 </body>

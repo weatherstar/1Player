@@ -3,6 +3,8 @@ var path = require('path');
 var del = require('del');
 
 var gulp = require('gulp');
+var usemin = require('gulp-usemin');
+var rev = require('gulp-rev');
 var uglify = require('gulp-uglify');
 var concat = require('gulp-concat');
 var util = require('gulp-util');
@@ -49,7 +51,7 @@ gulp.task('c', function () {
 });
 
 gulp.task('build', function (callback) {
-    sequence('less', 'concat','uglify', 'images', ['copy_html', 'copy_fonts','copy_other'],'cleanTemp')(callback)
+    sequence('less', 'concat','uglify', 'images', ['copy_html', 'copy_fonts','copy_other'], 'usemin','cleanTemp')(callback)
 });
 
 gulp.task('cleanBuild', function () {
@@ -57,6 +59,15 @@ gulp.task('cleanBuild', function () {
 });
 gulp.task('cleanTemp', function () {
     return del(TEMP_DIR);
+});
+
+gulp.task('usemin', function() {
+    return gulp.src(path.join(SRC_DIR, 'popup/popup.html'))
+        .pipe(usemin({
+            css: [ rev() ],
+            js: [ uglify(), rev() ]
+        }))
+        .pipe(gulp.dest(DIST_DIR));
 });
 
 gulp.task('concat', function () {
@@ -148,5 +159,4 @@ gulp.task('webserver', function () {
 gulp.task('watch', function () {
     gulp.watch(path.join(SRC_DIR, '**', '*.less'), ['less']);
     gulp.watch(path.join(SRC_DIR, '**', '*.js'), ['concat','uglify']);
-    gulp.watch(path.join(SRC_DIR, '**', '*.html'), ['copy_html']);
 });

@@ -33,6 +33,7 @@
         songLrcWrapEl: $('.one-player-lrc-wrap'),
         songListLoadingEl: $('#loading-song-list'),
         addLikeLoadingEl: $('.add-like-loading'),
+        lrcCheckEl: $('#lrc-check'),
 
         playerInit: false,
         currentPageID:'',
@@ -49,9 +50,25 @@
             this.fillBitRate();
             this.getSongLrc();
             this.listenExtensionMessage();
+            this.initLrcCheck();
         },
         initPlayer: function () {
             this.fillPlayerDOM();
+        },
+        initLrcCheck: function () {
+            var self = this;
+            var lrcSwitch = new Switch(this.lrcCheckEl,{
+                checked: self.backgroundPage.isShowDesktopLrc(),
+                size: 'small',
+                showText: true,
+                onText: '词',
+                offText: '词',
+                onChange: function (checked) {
+                    self.backgroundPage.setOptions({
+                        desktopLrc : checked ? 'show' : 'hide'
+                    })
+                }
+            });
         },
         listenExtensionMessage: function () {
             var self = this;

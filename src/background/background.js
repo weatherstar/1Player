@@ -169,6 +169,12 @@ var Background = Base.extend({
             self.sendMessageExtension(Events.BIT_RATE_CHANGE);
         });
     },
+    setOptions: function (options) {
+        var self = this;
+        chrome.storage.sync.set(options, function() {
+            self.getOptions();
+        });
+    },
     getSongTime: function () {
         this.sendMessageContent({type: Events.GET_SONG_TIME});
     },
@@ -228,9 +234,7 @@ var Background = Base.extend({
     showLrcNotification: function (lrc) {
         var self = this;
         var id = '';
-        console.log(lrc);
         var lrcArray = lrc.toString().split('<br>');
-        console.log(lrcArray);
         var options = {
             type: "basic",
             title: lrcArray[0] ? (Util.getElementText(lrcArray[0]) || '') : '',
