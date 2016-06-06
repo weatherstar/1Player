@@ -228,11 +228,13 @@ var Background = Base.extend({
     showLrcNotification: function (lrc) {
         var self = this;
         var id = '';
+        console.log(lrc);
         var lrcArray = lrc.toString().split('<br>');
+        console.log(lrcArray);
         var options = {
             type: "basic",
-            title: lrcArray[0] || '',
-            message: lrcArray[1] || '',
+            title: lrcArray[0] ? (Util.getElementText(lrcArray[0]) || '') : '',
+            message: lrcArray[1] ? (Util.getElementText(lrcArray[1]) || '') : '',
             iconUrl: '../icon128.png'
         };
         if(self.lrcNotificationArr.length < self.MAX_LRC_NOTIFICATION){
