@@ -59,6 +59,7 @@
             var self = this;
             var lrcSwitch = new Switch(this.lrcCheckEl,{
                 checked: self.backgroundPage.isShowDesktopLrc(),
+                onSwitchColor: '#F15648',
                 size: 'small',
                 showText: true,
                 onText: '词',

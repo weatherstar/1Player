@@ -1,6 +1,6 @@
 {
   "name": "1player",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "A chrome extension can control the player of music website.",
   "main": "index.js",
   "scripts": {
@@ -42,6 +42,7 @@
     "gulp-zip": "^3.2.0",
     "less-plugin-autoprefix": "^1.5.1",
     "less-plugin-clean-css": "^1.5.1",
-    "run-sequence": "^1.1.5"
+    "run-sequence": "^1.1.5",
+    "weatherstar-switch": "^1.0.3"
   }
 }
