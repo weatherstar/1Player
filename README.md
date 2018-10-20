@@ -4,33 +4,12 @@
 
 #### [下载地址](https://chrome.google.com/webstore/detail/1player/bbleianliopbinjkpnmnhikiplblaifl?hl=zh-CN)
 
-## Introduction
-
-#### Screenshot
-
-![image](http://7xls2e.com1.z0.glb.clouddn.com/1player-new-1.png)
-
-#### 桌面歌词及收藏成功通知
-
-![image](http://7xls2e.com1.z0.glb.clouddn.com/1player-new-2.png)
-
-#### 换曲提示
-
-![image](http://7xls2e.com1.z0.glb.clouddn.com/1player-new-6.png)
-
-#### 自定义快捷键
-
-![image](http://7xls2e.com1.z0.glb.clouddn.com/1player-new-3.png)
-
-#### 桌面通知、歌词以及歌曲码率设置
-
-![image](http://7xls2e.com1.z0.glb.clouddn.com/1player-new-4.png)
-
-#### 同一首歌不同码率文件大小对比
-
-![image](http://7xls2e.com1.z0.glb.clouddn.com/1player-new-5.png)
-
 #### Version
+
+#### 2.1.0
+
+- 修复播放器无法正确初始化的问题
+- 修复在新版 Chrome 下歌词通知无法显示的问题
 
 #### 2.0.6
 
@@ -43,13 +22,13 @@
 #### 2.0.1
 
 - 增加桌面歌词显示，可在选项中控制显隐
-- 增加支持web端播放320k歌曲（感谢[864907600cc](https://greasyfork.org/zh-CN/users/141-864907600cc)提供的脚本）
-- 播放器UI优化（参考豆瓣FM）
+- 增加支持 web 端播放 320k 歌曲（感谢[864907600cc](https://greasyfork.org/zh-CN/users/141-864907600cc)提供的脚本）
+- 播放器 UI 优化（参考豆瓣FM）
 - 增加音量控制
 - 增加重新播放控制
 - 增加播放器面板歌词显示
 - 增加收藏当前歌曲至我喜欢的歌曲，可设置快捷键收藏
-- 其他一些bug修复
+- 其他一些 bug 修复
 
 #### 1.0.3
 
@@ -58,7 +37,7 @@
 
 #### 1.0.2
 
-- 修复了一些bug
+- 修复了一些 bug
 
 #### 1.0.1
 
