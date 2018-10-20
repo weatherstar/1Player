@@ -5,13 +5,10 @@ var Background = Base.extend({
     ADD_LIKE_MAX_TIME: 6000,
 
     playerInit: false,
-    lrcNotificationArr: [],
     songTime:'',
     songLrc: '',
     addLikeMsg: '',
     isLogin: false,
-    songNotificationShow: false,
-    lrcNotificationShow: false,
     loadingLike: false,
     songNotificationID: 'songNotification',
     lrcNotificationID: 'lrcNotification',
@@ -152,12 +149,6 @@ var Background = Base.extend({
 
     listenNotification: function () {
         var self = this;
-        chrome.notifications.onClosed.addListener(function (id) {
-            self[id + 'Show'] = false;
-            if(id.indexOf(self.lrcNotificationID) > -1){
-                self.lrcNotificationArr.shift();
-            }
-        });
         chrome.notifications.onClicked.addListener(function () {
             self.goPage('/song?id=' + self.songInfo.song_id);
         });
@@ -232,8 +223,7 @@ var Background = Base.extend({
         self.showSongNotification(options);
     },
     showLrcNotification: function (lrc) {
-        var self = this;
-        var id = '';
+
         var lrcArray = lrc.toString().split('<br>');
         var options = {
             type: "basic",
@@ -241,14 +231,7 @@ var Background = Base.extend({
             message: lrcArray[1] ? (Util.getElementText(lrcArray[1]) || '') : '',
             iconUrl: '../icon128.png'
         };
-        if(self.lrcNotificationArr.length < self.MAX_LRC_NOTIFICATION){
-            id = self.lrcNotificationID + new Date().getTime();
-            chrome.notifications.create(id, options);
-            self.lrcNotificationArr.push(id);
-        }else{
-            id = self.lrcNotificationArr[self.MAX_LRC_NOTIFICATION-1];
-            chrome.notifications.update(id, options);
-        }
+        chrome.notifications.create(new Date().getTime().toString(), options);
     },
     desktopNotify: function () {
         var self = this;
@@ -279,22 +262,7 @@ var Background = Base.extend({
         },500);
     },
     showSongNotification: function (options) {
-        var self = this;
-        if(self.songNotificationShow){
-            clearTimeout(self.clearNotificationTimeout);
-            chrome.notifications.update(self.songNotificationID, options, function () {
-                self.clearNotificationTimeout = setTimeout(function () {
-                    chrome.notifications.clear(self.songNotificationID);
-                },self.options.notificationTimeout);
-            });
-        }else{
-            chrome.notifications.create(self.songNotificationID, options, function () {
-                self.clearNotificationTimeout = setTimeout(function () {
-                    chrome.notifications.clear(self.songNotificationID);
-                },self.options.notificationTimeout);
-            });
-            self.songNotificationShow = true;
-        }
+        chrome.notifications.create(options)
     },
     copySongLinkToClipboard: function () {
         if(this.currentPort){
@@ -320,7 +288,7 @@ var Background = Base.extend({
     isMVPage: function (callback) {
         var self = this;
         callback = callback || Util.noop;
-        chrome.tabs.query({url:"http://music.163.com/*"}, function (tabs) {
+        chrome.tabs.query({url:"https://music.163.com/*"}, function (tabs) {
             tabs.forEach(function (tab) {
                 if(tab.id = self.currentPort.sender.tab.id){
                     callback(/http:\/\/music\.163\.com\/\#\/mv\?id=\d+/gi.test(tab.url));

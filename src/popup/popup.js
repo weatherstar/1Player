@@ -14,7 +14,7 @@
             'click .play-like': 'addToLike'
         },
 
-        MUSIC_163_LINK: 'http://music.163.com/ ',
+        MUSIC_163_LINK: 'https://music.163.com/ ',
         SONG_LIST_HEIGHT: '300px',
 
         songNameEL: $('.song-name'),
